@@ -21,7 +21,7 @@ from experiment_config.utils import (
 data_source_headings = []
 selected_features = []
 
-data_source_question = [
+data_source_questions = [
     {
         'type': 'input',
         'name': 'experiment_name',
@@ -54,7 +54,7 @@ data_source_question = [
         'name': 'selected_features',
         'message': 'Select which of the columns you wish to use as features',
         'choices': ({'name': name} for name in data_source_headings),
-        'filter': lambda answer: set_selected_features(answer, selected_features)
+        'filter': lambda answer: set_selected_features(answer, selected_features),
     },
     {
         'type': 'list',
@@ -68,7 +68,7 @@ data_source_question = [
     },
 ]
 
-data_source_answers = styled_prompt(data_source_question)
+data_source_answers = styled_prompt(data_source_questions)
 
 feature_data_type_questions = [
     *[
