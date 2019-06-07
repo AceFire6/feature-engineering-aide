@@ -165,6 +165,14 @@ version = "0.14"
 
 [[package]]
 category = "main"
+description = "ordered, dynamically-expandable dot-access dictionary"
+name = "dotmap"
+optional = false
+python-versions = "*"
+version = "1.3.8"
+
+[[package]]
+category = "main"
 description = "Discover and load entry points from installed packages."
 name = "entrypoints"
 optional = false
@@ -1034,7 +1042,7 @@ numpy = "*"
 scipy = "*"
 
 [metadata]
-content-hash = "a71cebcc6d9ab9965a237e2fff03411d2fe6078ed70f9bc2baeb6c0d0820cf2d"
+content-hash = "d3f50e2371cecc6655a7b11005bf1f02556a03cc284819e3db10be897e329961"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -1054,6 +1062,7 @@ deap = ["95c63e66d755ec206c80fdb2908851c0bef420ee8651ad7be4f0578e9e909bcf"]
 decorator = ["86156361c50488b84a3f148056ea716ca587df2f0de1d34750d35c21312725de", "f069f3a01830ca754ba5258fde2278454a0b5b79e0d7f5c13b3b97e57d4acff6"]
 defusedxml = ["6687150770438374ab581bb7a1b327a847dd9c5749e396102de3fad4e8a3ef93", "f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5"]
 docutils = ["02aec4bd92ab067f6ff27a38a38a41173bf01bed8f89157768c1573f53e474a6", "51e64ef2ebfb29cae1faa133b3710143496eca21c530f3f71424d77687764274", "7a4bd47eaf6596e1295ecb11361139febe29b084a87bf005bf899f9a42edc3c6"]
+dotmap = ["891371a8b037b0dec645ad7a78b4e2740e3529bf596273fda37b77a086a3c72c", "8dd3b4480a75fbd650646515a7371748020d957927b35c09b2f8fc7b98dbae0f"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
 imagesize = ["3f349de3eb99145973fefb7dbe38554414e5c30abd0c8e4b970a7c9d09f3a1d8", "f3832918bc3c66617f92e35f5d70729187676313caa60c187eb0f28b8fe5e3b5"]

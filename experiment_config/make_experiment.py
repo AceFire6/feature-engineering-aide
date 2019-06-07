@@ -65,18 +65,22 @@ data_source_question = [
 
 data_source_answers = styled_prompt(data_source_question)
 
-feature_questions = [
+feature_data_type_questions = [
     *[
         {
             'type': 'list',
             'name': feature,
             'message': f'Select the data type for column: {feature}',
             'choices': [
-                'Category',
-                'Boolean',
+                'category',
+                'boolean',
             ],
         } for feature in selected_features + [data_source_answers['target']]
     ],
+]
+feature_type_answers = styled_prompt(feature_data_type_questions)
+
+feature_questions = [
     {
         'type': 'input',
         'name': 'true_values',
@@ -144,12 +148,17 @@ def select_metrics() -> Dict[str, Any]:
 
 metric_choices = select_metrics()
 
-experiment_name = data_source_answers.pop('experiment_name')
+experiment_name = data_source_answers['experiment_name']
 
 config = {
     'experiment': experiment_name,
-    'data_source': data_source_answers,
-    'features': feature_answers,
+    'data_source': data_source_answers['data_source'],
+    'data': {
+        'data_types': feature_type_answers,
+        'selected_features': data_source_answers['selected_features'],
+        'target': data_source_answers['target'],
+        **feature_answers,
+    },
     **classifier_choices,
     **metric_choices,
 }
