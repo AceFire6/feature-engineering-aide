@@ -33,3 +33,8 @@ SUPPORTED_METRICS = {
     'F1 Score': f1_score,
     "Matthew's Correlation Coefficient": matthews_corrcoef,
 }
+
+DATA_TYPE_CHOICES = {
+    'Categorical': 'category',
+    'Boolean': 'bool',
+}

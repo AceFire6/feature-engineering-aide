@@ -5,7 +5,12 @@ from typing import Any, Dict
 
 import toml
 
-from experiment_config.settings import styled_prompt, SUPPORTED_CLASSIFIERS, SUPPORTED_METRICS
+from experiment_config.settings import (
+    DATA_TYPE_CHOICES,
+    styled_prompt,
+    SUPPORTED_CLASSIFIERS,
+    SUPPORTED_METRICS,
+)
 from experiment_config.utils import (
     extract_headings,
     get_entries_from_csv_row,
@@ -71,10 +76,8 @@ feature_data_type_questions = [
             'type': 'list',
             'name': feature,
             'message': f'Select the data type for column: {feature}',
-            'choices': [
-                'category',
-                'boolean',
-            ],
+            'choices': DATA_TYPE_CHOICES.keys(),
+            'filter': lambda answer: DATA_TYPE_CHOICES[answer],
         } for feature in selected_features + [data_source_answers['target']]
     ],
 ]
