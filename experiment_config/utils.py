@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 from pathlib import Path
 
 from typing import List
@@ -35,3 +36,7 @@ def get_entries_from_csv_row(headings_csv: str) -> List[str]:
 def set_selected_features(input_features: List[str], selected_features: List) -> List[str]:
     selected_features.extend(input_features)
     return input_features
+
+
+def get_random_seed(now: datetime) -> int:
+    return int(now.timestamp() * 1_000_000)

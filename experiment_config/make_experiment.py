@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict
 
@@ -15,6 +15,7 @@ from experiment_config.settings import (
 from experiment_config.utils import (
     extract_headings,
     get_entries_from_csv_row,
+    get_random_seed,
     set_selected_features,
 )
 
@@ -209,7 +210,11 @@ metric_choices = select_metrics()
 
 experiment_name = data_source_answers['experiment_name']
 
+now = datetime.now()
+
 config = {
+    'timestamp': now.isoformat(),
+    'random_seed': get_random_seed(now),
     'experiment': experiment_name,
     'data_source': data_source_answers['data_source'],
     'data': {
