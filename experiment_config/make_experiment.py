@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import Any, Dict
 
+import pandas
 import toml
 
 from experiment_config.settings import (
@@ -70,6 +71,7 @@ data_source_questions = [
 
 data_source_answers = styled_prompt(data_source_questions)
 
+all_features = selected_features + [data_source_answers['target']]
 feature_data_type_questions = [
     *[
         {
@@ -78,7 +80,7 @@ feature_data_type_questions = [
             'message': f'Select the data type for column: {feature}',
             'choices': DATA_TYPE_CHOICES.keys(),
             'filter': lambda answer: DATA_TYPE_CHOICES[answer],
-        } for feature in selected_features + [data_source_answers['target']]
+        } for feature in all_features
     ],
 ]
 feature_type_answers = styled_prompt(feature_data_type_questions)
@@ -98,6 +100,62 @@ feature_questions = [
     },
 ]
 feature_answers = styled_prompt(feature_questions)
+
+
+bool_type_features = {}
+other_type_features = {}
+for feature, type_name in feature_type_answers.items():
+    if type_name == DATA_TYPE_CHOICES['Boolean']:
+        bool_type_features[feature] = type_name
+    else:
+        other_type_features[feature] = type_name
+
+
+data = pandas.read_csv(
+    filepath_or_buffer=data_source_answers['data_source'],
+    usecols=all_features,
+    true_values=feature_answers['true_values'],
+    false_values=feature_answers['false_values'],
+)
+
+possible_na_values = {}
+for feature in feature_type_answers.keys():
+    possible_na_values[feature] = []
+
+    unique_values = data[feature].unique()
+    for value in unique_values:
+        if isinstance(value, str):
+            if not value.isalnum():
+                possible_na_values[feature].append(value)
+
+# for feature in feature_type_answers.keys():
+#     unique_values = data[feature].value_counts(normalize=True).to_dict()
+#
+#     unique_value_type_frequency = defaultdict(lambda: {'values': [], 'frequency': 0})
+#     for value, frequency in unique_values.items():
+#         value_type = type(value)
+#         unique_value_type_frequency[value_type]['frequency'] += frequency
+#         unique_value_type_frequency[value_type]['values'].append(value)
+#
+#     possible_na_values[feature] = []
+#     for values_type, values_aggs in unique_value_type_frequency.items():
+#         if values_aggs['frequency'] > 0.2:
+#             continue
+#
+#         possible_na_values[feature].extend(values_aggs['values'])
+
+
+na_value_questions = [
+    *[
+        {
+            'type': 'checkbox',
+            'name': feature,
+            'message': f'Select NA values for: {feature}',
+            'choices': [{'name': name} for name in values],
+        } for feature, values in possible_na_values.items() if values
+    ],
+]
+na_value_answers = styled_prompt(na_value_questions)
 
 
 def select_classifiers() -> Dict[str, Any]:
@@ -157,9 +215,11 @@ config = {
     'experiment': experiment_name,
     'data_source': data_source_answers['data_source'],
     'data': {
-        'data_types': feature_type_answers,
         'selected_features': data_source_answers['selected_features'],
         'target': data_source_answers['target'],
+        'bool_type_features': bool_type_features,
+        'other_type_features': other_type_features,
+        'na_values': na_value_answers,
         **feature_answers,
     },
     **classifier_choices,
