@@ -6,11 +6,10 @@ from dotmap import DotMap
 import pandas as pd
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.preprocessing import LabelEncoder
-from tqdm import tqdm
 import toml
+from tqdm import tqdm
 
 from experiment_config.settings import SUPPORTED_CLASSIFIERS, SUPPORTED_METRICS
-
 
 experiment_input_paths = sys.argv[1:]
 if not experiment_input_paths:
