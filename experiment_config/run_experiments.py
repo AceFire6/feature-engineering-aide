@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 
 from dotmap import DotMap
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.preprocessing import LabelEncoder
@@ -29,6 +30,8 @@ for experiment_file_path in experiment_file_paths:
     experiment_configs.append(experiment_config_dot_dict)
 
 for experiment_config in experiment_configs:
+    np.random.seed(experiment_config.random_seed)
+
     prediction_data_file = Path(experiment_config.data_source)
 
     prediction_true_values = experiment_config.data.true_values

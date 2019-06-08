@@ -39,4 +39,6 @@ def set_selected_features(input_features: List[str], selected_features: List) ->
 
 
 def get_random_seed(now: datetime) -> int:
-    return int(now.timestamp() * 1_000_000)
+    # Max value is 10 digits long
+    # Only experiments generated at the same second with have the same seed
+    return int(now.timestamp())
