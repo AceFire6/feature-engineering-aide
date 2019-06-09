@@ -72,6 +72,8 @@ for experiment_config in experiment_configs:
         for classifier in experiment_config.classifiers
     }
 
+    results_file_name = f'{experiment_config.experiment}_results.txt'
+
     for classifier_name, classifier_class in classifiers.items():
         print(f'Running {classifier_name}')
         for train_index, test_index in tqdm(leave_one_out.split(X, y, X['Application Year'])):
@@ -87,4 +89,22 @@ for experiment_config in experiment_configs:
                 metric_function = SUPPORTED_METRICS[metric]
                 result_metrics[metric].append(metric_function(y_test, y_hat))
 
-        print(classifier_name, result_metrics)
+        with open(results_file_name, 'w') as results_file:
+            print(classifier_name)
+
+            for metric, results in result_metrics.items():
+                min_result = min(results)
+                max_result = max(results)
+                q1, median, q3 = np.percentile(results, [25, 50, 75])
+                print(metric, file=results_file)
+                print(results, file=results_file)
+                print(
+                    f'Min: {min_result}',
+                    f'Q1: {q1}',
+                    f'Median: {median}',
+                    f'Q3: {q3}',
+                    f'Max: {max_result}',
+                    sep='\n',
+                    end='\n\n',
+                    file=results_file,
+                )
