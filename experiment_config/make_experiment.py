@@ -157,6 +157,21 @@ na_value_questions = [
 na_value_answers = styled_prompt(na_value_questions)
 
 
+data_split_questions = [
+    {
+        'type': 'input',
+        'name': 'data_split_column',
+        'message': 'Enter column on which to test the condition to create the holdout dataset',
+    },
+    {
+        'type': 'input',
+        'name': 'holdout_split_condition',
+        'message': 'Enter condition on which to test the condition to create the holdout dataset',
+    },
+]
+data_split_answers = styled_prompt(data_split_questions)
+
+
 def select_classifiers() -> Dict[str, Any]:
     error_message = 'Choose at least 1 classifier'
 
@@ -214,7 +229,8 @@ now = datetime.now()
 
 config = {
     'timestamp': now.isoformat(),
-    'random_seed': get_random_seed(now),
+    # TODO: Investigate when it makes sense to use a different seed
+    'random_seed': 0,  # get_random_seed(now),
     'experiment': experiment_name,
     'data_source': data_source_answers['data_source'],
     'data': {
@@ -223,6 +239,7 @@ config = {
         'bool_type_features': bool_type_features,
         'other_type_features': other_type_features,
         'na_values': na_value_answers,
+        **data_split_answers,
         **feature_answers,
     },
     **classifier_choices,

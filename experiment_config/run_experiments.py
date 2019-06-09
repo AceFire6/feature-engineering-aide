@@ -11,6 +11,7 @@ import toml
 from tqdm import tqdm
 
 from experiment_config.settings import SUPPORTED_CLASSIFIERS, SUPPORTED_METRICS
+from experiment_config.utils import get_encoding_from_label
 
 experiment_input_paths = sys.argv[1:]
 if not experiment_input_paths:
@@ -61,18 +62,29 @@ for experiment_config in experiment_configs:
         lambda x: label_encoded_cols[x.name].fit_transform(x)
     )
 
-    X = training_data[prediction_data_rows]
-    y = training_data[target_column]
+    split_column = experiment_config.data.data_split_column
+    holdout_split_condition = get_encoding_from_label(
+        column=split_column,
+        label=experiment_config.data.holdout_split_condition,
+        encoders=label_encoded_cols,
+    )
+    holdout_index = training_data[split_column] == holdout_split_condition
 
-    leave_one_out = LeaveOneGroupOut()
+    X = training_data[~holdout_index][prediction_data_rows]
+    y = training_data[~holdout_index][target_column]
 
-    result_metrics = {metric: [] for metric in experiment_config.metrics}
+    classifier_result_metrics = {
+        classifier: {metric: [] for metric in experiment_config.metrics}
+        for classifier in experiment_config.classifiers
+    }
     classifiers = {
         classifier: SUPPORTED_CLASSIFIERS[classifier]
         for classifier in experiment_config.classifiers
     }
 
     results_file_name = f'{experiment_config.experiment}_results.txt'
+
+    leave_one_out = LeaveOneGroupOut()
 
     for classifier_name, classifier_class in classifiers.items():
         print(f'Running {classifier_name}')
@@ -85,26 +97,28 @@ for experiment_config in experiment_configs:
 
             y_hat = classifier.predict(X_test)
 
-            for metric in result_metrics.keys():
+            for metric in experiment_config.metrics:
                 metric_function = SUPPORTED_METRICS[metric]
-                result_metrics[metric].append(metric_function(y_test, y_hat))
+                metric_result = metric_function(y_test, y_hat)
+                classifier_result_metrics[classifier_name][metric].append(metric_result)
 
-        with open(results_file_name, 'w') as results_file:
-            print(classifier_name)
+    with open(results_file_name, 'w') as results_file:
+        for classifier_name, result_metrics in classifier_result_metrics.items():
+            print(classifier_name, file=results_file)
 
             for metric, results in result_metrics.items():
                 min_result = min(results)
                 max_result = max(results)
                 q1, median, q3 = np.percentile(results, [25, 50, 75])
-                print(metric, file=results_file)
-                print(results, file=results_file)
+                print(f'\t{metric}', file=results_file)
+                print(f'\t\t{results}', file=results_file)
                 print(
-                    f'Min: {min_result}',
+                    f'\t\tMin: {min_result}',
                     f'Q1: {q1}',
                     f'Median: {median}',
                     f'Q3: {q3}',
                     f'Max: {max_result}',
-                    sep='\n',
+                    sep='\n\t\t',
                     end='\n\n',
                     file=results_file,
                 )
