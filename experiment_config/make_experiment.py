@@ -68,11 +68,24 @@ data_source_questions = [
             if name not in selected_features
         ),
     },
+    {
+        'type': 'input',
+        'name': 'data_split_column',
+        'message': 'Enter column on which to test the condition to create the holdout dataset',
+    },
+    {
+        'type': 'input',
+        'name': 'holdout_split_condition',
+        'message': 'Enter condition on which to test the condition to create the holdout dataset',
+    },
 ]
 
 data_source_answers = styled_prompt(data_source_questions)
 
-all_features = selected_features + [data_source_answers['target']]
+all_features = (
+    selected_features +
+    [data_source_answers['target'], data_source_answers['data_split_column']]
+)
 feature_data_type_questions = [
     *[
         {
@@ -157,21 +170,6 @@ na_value_questions = [
 na_value_answers = styled_prompt(na_value_questions)
 
 
-data_split_questions = [
-    {
-        'type': 'input',
-        'name': 'data_split_column',
-        'message': 'Enter column on which to test the condition to create the holdout dataset',
-    },
-    {
-        'type': 'input',
-        'name': 'holdout_split_condition',
-        'message': 'Enter condition on which to test the condition to create the holdout dataset',
-    },
-]
-data_split_answers = styled_prompt(data_split_questions)
-
-
 def select_classifiers() -> Dict[str, Any]:
     error_message = 'Choose at least 1 classifier'
 
@@ -236,10 +234,11 @@ config = {
     'data': {
         'selected_features': data_source_answers['selected_features'],
         'target': data_source_answers['target'],
+        'data_split_column': data_source_answers['data_split_column'],
+        'holdout_split_condition': data_source_answers['holdout_split_condition'],
         'bool_type_features': bool_type_features,
         'other_type_features': other_type_features,
         'na_values': na_value_answers,
-        **data_split_answers,
         **feature_answers,
     },
     **classifier_choices,
