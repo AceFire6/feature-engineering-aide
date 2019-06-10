@@ -104,6 +104,8 @@ for experiment_config in experiment_configs:
                 classifier_result_metrics[classifier_name][metric].append(metric_result)
 
     with open(results_file_name, 'w') as results_file:
+        print(f'n = {training_data["Application Year"].size}', file=results_file)
+
         for classifier_name, result_metrics in classifier_result_metrics.items():
             print(classifier_name, file=results_file)
 
