@@ -43,11 +43,12 @@ for experiment_config in experiment_configs:
 
     prediction_data_rows = experiment_config.data.selected_features
     target_column = experiment_config.data.target
+    split_column = experiment_config.data.data_split_column
 
     prediction_data: pd.DataFrame = pd.read_csv(
         filepath_or_buffer=prediction_data_file,
         dtype=other_data_type_features,
-        usecols=prediction_data_rows + [target_column],
+        usecols=prediction_data_rows + [target_column, split_column],
         true_values=prediction_true_values,
         false_values=prediction_false_values,
         na_values=experiment_config.data.na_values,
@@ -62,7 +63,6 @@ for experiment_config in experiment_configs:
         lambda x: label_encoded_cols[x.name].fit_transform(x)
     )
 
-    split_column = experiment_config.data.data_split_column
     holdout_split_condition = get_encoding_from_label(
         column=split_column,
         label=experiment_config.data.holdout_split_condition,
@@ -72,6 +72,7 @@ for experiment_config in experiment_configs:
 
     X = training_data[~holdout_index][prediction_data_rows]
     y = training_data[~holdout_index][target_column]
+    groups = training_data[~holdout_index][split_column]
 
     classifier_result_metrics = {
         classifier: {metric: [] for metric in experiment_config.metrics}
@@ -88,7 +89,7 @@ for experiment_config in experiment_configs:
 
     for classifier_name, classifier_class in classifiers.items():
         print(f'Running {classifier_name}')
-        for train_index, test_index in tqdm(leave_one_out.split(X, y, X['Application Year'])):
+        for train_index, test_index in tqdm(leave_one_out.split(X, y, groups)):
             X_train, X_test = X.iloc[train_index], X.iloc[test_index]
             y_train, y_test = y.iloc[train_index], y.iloc[test_index]
 
