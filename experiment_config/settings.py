@@ -5,8 +5,14 @@ from pygments.token import Token
 from PyInquirer import prompt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score, matthews_corrcoef
-from sklearn.naive_bayes import ComplementNB
 from sklearn.tree import DecisionTreeClassifier
+
+
+try:
+    from sklearn.naive_bayes import ComplementNB as NaiveBayes
+except ImportError:
+    from sklearn.naive_bayes import GaussianNB as NaiveBayes
+    print("Can't use ComplementNB - using GaussianNB")
 
 
 prompt_style = style_from_dict({
@@ -22,7 +28,7 @@ prompt_style = style_from_dict({
 styled_prompt = partial(prompt, style=prompt_style)
 
 SUPPORTED_CLASSIFIERS = {
-    'Naive Bayes': ComplementNB,
+    'Naive Bayes': NaiveBayes,
     'Decision Tree': DecisionTreeClassifier,
     'Random Forest': RandomForestClassifier,
 }
