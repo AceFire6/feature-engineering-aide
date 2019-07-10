@@ -52,10 +52,9 @@ for experiment_config in experiment_configs:
         true_values=prediction_true_values,
         false_values=prediction_false_values,
         na_values=experiment_config.data.na_values,
-        keep_default_na=False,
     )
-    prediction_data = prediction_data.astype(boolean_features)
     prediction_data.dropna(inplace=True)
+    prediction_data = prediction_data.astype(boolean_features)
 
     label_encoded_cols = defaultdict(LabelEncoder)
 
