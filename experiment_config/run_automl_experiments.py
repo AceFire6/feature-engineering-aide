@@ -20,6 +20,8 @@ if not experiment_input_paths:
     print('Please pass in experiment files as arguments to this script')
 
 N_JOBS = 3
+TASK_TIME = 1800
+TIME_PER_RUN = TASK_TIME // 10
 
 experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
 
@@ -81,8 +83,8 @@ for experiment_config in experiment_configs:
     results_file_name = f'{experiment_config.experiment}_automl_mcc_results.txt'
 
     classifier = AutoSklearnClassifier(
-        time_left_for_this_task=1800,
-        per_run_time_limit=180,
+        time_left_for_this_task=TASK_TIME,
+        per_run_time_limit=TIME_PER_RUN,
         n_jobs=N_JOBS,
         resampling_strategy=LeaveOneGroupOut,
         resampling_strategy_arguments={'groups': groups},
@@ -107,6 +109,9 @@ for experiment_config in experiment_configs:
 
     with open(results_file_name, 'w') as results_file:
         print(f'n = {training_data[target_column].size}', file=results_file)
+        print(f'n_jobs = {N_JOBS}', file=results_file)
+        print(f'total_time = {TASK_TIME}', file=results_file)
+        print(f'time_per_run = {TIME_PER_RUN}', file=results_file)
         print(classifier.sprint_statistics(), file=results_file)
 
         for metric, results in result_metrics.items():
