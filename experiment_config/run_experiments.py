@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 import sys
 
@@ -82,8 +83,6 @@ for experiment_config in experiment_configs:
         for classifier in experiment_config.classifiers
     }
 
-    results_file_name = f'{experiment_config.experiment}_results.txt'
-
     leave_one_out = LeaveOneGroupOut()
 
     for classifier_name, classifier_class in classifiers.items():
@@ -101,6 +100,9 @@ for experiment_config in experiment_configs:
                 metric_function = SUPPORTED_METRICS[metric]
                 metric_result = metric_function(y_test, y_hat)
                 classifier_result_metrics[classifier_name][metric].append(metric_result)
+
+    now = f'{datetime.utcnow():%Y-%m-%d_%H:%M:%S}'
+    results_file_name = f'{experiment_config.experiment}_automl_mcc_results_{now}.txt'
 
     with open(results_file_name, 'w') as results_file:
         print(f'n = {training_data[target_column].size}', file=results_file)
