@@ -4,7 +4,10 @@ from pathlib import Path
 
 from typing import Dict, List
 
+from dotmap import DotMap
+import numpy as np
 from sklearn.preprocessing import LabelEncoder
+import toml
 
 
 def extract_headings(data_source: str, headings: List[str]) -> str:
@@ -48,3 +51,39 @@ def get_random_seed(now: datetime) -> int:
 
 def get_encoding_from_label(column: str, label: str, encoders: Dict[str, LabelEncoder]) -> str:
     return encoders[column].transform([label])[0]
+
+
+def parse_experiment_paths(experiment_input_paths):
+    experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
+    experiment_configs = []
+
+    for experiment_file_path in experiment_file_paths:
+        if experiment_file_path.is_dir():
+            print(f'Cannot handle {experiment_file_path.absolute()} as it is a directory!')
+            continue
+
+        experiment_config = toml.load(experiment_file_path)
+        experiment_config_dot_dict = DotMap(experiment_config)
+        experiment_configs.append(experiment_config_dot_dict)
+
+    return experiment_configs
+
+
+def print_metric_results_five_number_summary(result_metrics, results_file):
+    for metric, results in result_metrics.items():
+        min_result = min(results)
+        max_result = max(results)
+        q1, median, q3 = np.percentile(results, [25, 50, 75])
+
+        print(f'\t{metric}', file=results_file)
+        print(f'\t\t{results}', file=results_file)
+        print(
+            f'\t\tMin: {min_result}',
+            f'Q1: {q1}',
+            f'Median: {median}',
+            f'Q3: {q3}',
+            f'Max: {max_result}',
+            sep='\n\t\t',
+            end='\n\n',
+            file=results_file,
+        )

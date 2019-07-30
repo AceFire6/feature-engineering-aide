@@ -5,16 +5,17 @@ import sys
 
 from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
-from dotmap import DotMap
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.preprocessing import LabelEncoder
-import toml
 
 from experiment_config.settings import SUPPORTED_METRICS
-from experiment_config.utils import get_encoding_from_label
-
+from experiment_config.utils import (
+    get_encoding_from_label,
+    parse_experiment_paths,
+    print_metric_results_five_number_summary,
+)
 
 experiment_input_paths = sys.argv[1:]
 if not experiment_input_paths:
@@ -24,18 +25,7 @@ N_JOBS = 3
 TASK_TIME = 1800
 TIME_PER_RUN = TASK_TIME // 10
 
-experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
-
-experiment_configs = []
-
-for experiment_file_path in experiment_file_paths:
-    if experiment_file_path.is_dir():
-        print(f'Cannot handle {experiment_file_path.absolute()} as it is a directory!')
-        continue
-
-    experiment_config = toml.load(experiment_file_path)
-    experiment_config_dot_dict = DotMap(experiment_config)
-    experiment_configs.append(experiment_config_dot_dict)
+experiment_configs = parse_experiment_paths(experiment_input_paths)
 
 for experiment_config in experiment_configs:
     np.random.seed(experiment_config.random_seed)
@@ -117,20 +107,4 @@ for experiment_config in experiment_configs:
         print(f'time_per_run = {TIME_PER_RUN}', file=results_file)
         print(classifier.sprint_statistics(), file=results_file)
 
-        for metric, results in result_metrics.items():
-            min_result = min(results)
-            max_result = max(results)
-            q1, median, q3 = np.percentile(results, [25, 50, 75])
-
-            print(f'\t{metric}', file=results_file)
-            print(f'\t\t{results}', file=results_file)
-            print(
-                f'\t\tMin: {min_result}',
-                f'Q1: {q1}',
-                f'Median: {median}',
-                f'Q3: {q3}',
-                f'Max: {max_result}',
-                sep='\n\t\t',
-                end='\n\n',
-                file=results_file,
-            )
+        print_metric_results_five_number_summary(result_metrics, results_file)
