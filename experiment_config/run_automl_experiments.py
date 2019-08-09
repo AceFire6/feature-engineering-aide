@@ -5,7 +5,6 @@ from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
 from sklearn.model_selection import LeaveOneGroupOut
 
-from experiment_config.experiment import Experiment
 from experiment_config.settings import SUPPORTED_METRICS
 from experiment_config.utils import (
     parse_experiment_paths,
@@ -20,13 +19,9 @@ N_JOBS = 3
 TASK_TIME = 1800
 TIME_PER_RUN = TASK_TIME // 10
 
-experiment_configs = parse_experiment_paths(experiment_input_paths)
+experiments = parse_experiment_paths(experiment_input_paths)
 
-for experiment_config in experiment_configs:
-    experiment = Experiment(experiment_config)
-
-    result_metrics = {metric: [] for metric in experiment_config.metrics}
-
+for experiment in experiments:
     classifier = AutoSklearnClassifier(
         time_left_for_this_task=TASK_TIME,
         per_run_time_limit=TIME_PER_RUN,
@@ -48,13 +43,12 @@ for experiment_config in experiment_configs:
         classifier.refit(X_train, y_train)
         y_hat = classifier.predict(X_test)
 
-        for metric in experiment_config.metrics:
-            metric_function = SUPPORTED_METRICS[metric]
+        for metric, metric_function in experiment.metrics.items():
             metric_result = metric_function(y_test, y_hat)
-            result_metrics[metric].append(metric_result)
+            experiment.add_result(metric, metric_result)
 
     now = f'{datetime.utcnow():%Y-%m-%d_%H:%M:%S}'
-    results_file_name = f'{experiment_config.experiment}_automl_mcc_results_{now}.txt'
+    results_file_name = f'{experiment.name}_automl_mcc_results_{now}.txt'
 
     with open(results_file_name, 'w') as results_file:
         print(f'n = {experiment.training_set_sample_size()}', file=results_file)
@@ -63,4 +57,4 @@ for experiment_config in experiment_configs:
         print(f'time_per_run = {TIME_PER_RUN}', file=results_file)
         print(classifier.sprint_statistics(), file=results_file)
 
-        print_metric_results_five_number_summary(result_metrics, results_file)
+        print_metric_results_five_number_summary(experiment.metric_results, results_file)

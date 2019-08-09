@@ -2,9 +2,8 @@ import csv
 from datetime import datetime
 from pathlib import Path
 
-from typing import Dict, List
+from typing import Dict, List, TextIO
 
-from dotmap import DotMap
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 import toml
@@ -53,9 +52,11 @@ def get_encoding_from_label(column: str, label: str, encoders: Dict[str, LabelEn
     return encoders[column].transform([label])[0]
 
 
-def parse_experiment_paths(experiment_input_paths):
+def parse_experiment_paths(experiment_input_paths: List[str]) -> List['Experiment']:
+    from experiment_config.experiment import Experiment
+
     experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
-    experiment_configs = []
+    experiments = []
 
     for experiment_file_path in experiment_file_paths:
         if experiment_file_path.is_dir():
@@ -63,13 +64,16 @@ def parse_experiment_paths(experiment_input_paths):
             continue
 
         experiment_config = toml.load(experiment_file_path)
-        experiment_config_dot_dict = DotMap(experiment_config)
-        experiment_configs.append(experiment_config_dot_dict)
+        experiment = Experiment(experiment_config)
+        experiments.append(experiment)
 
-    return experiment_configs
+    return experiments
 
 
-def print_metric_results_five_number_summary(result_metrics, results_file):
+def print_metric_results_five_number_summary(
+    result_metrics: Dict[str, List[float]],
+    results_file: TextIO,
+) -> None:
     for metric, results in result_metrics.items():
         min_result = min(results)
         max_result = max(results)
