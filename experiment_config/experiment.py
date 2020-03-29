@@ -22,14 +22,14 @@ class Experiment:
         self.boolean_features = experiment_config['data']['bool_type_features']
         self.other_data_type_features = experiment_config['data']['other_type_features']
 
-        self.prediction_data_rows = experiment_config['data']['selected_features']
+        self.prediction_data_columns = experiment_config['data']['selected_features']
         self.target_column = experiment_config['data']['target']
         self.split_column = experiment_config['data']['data_split_column']
 
         self.prediction_data: pd.DataFrame = pd.read_csv(
             filepath_or_buffer=self.prediction_data_file,
             dtype=self.other_data_type_features,
-            usecols=self.prediction_data_rows + [self.target_column, self.split_column],
+            usecols=self.prediction_data_columns + [self.target_column, self.split_column],
             true_values=self.prediction_true_values,
             false_values=self.prediction_false_values,
             na_values=experiment_config['data']['na_values'],
@@ -50,7 +50,7 @@ class Experiment:
         )
         holdout_index = self.training_data[self.split_column] == self.holdout_split_condition
 
-        self.X = self.training_data[~holdout_index][self.prediction_data_rows]
+        self.X = self.training_data[~holdout_index][self.prediction_data_columns]
         self.y = self.training_data[~holdout_index][self.target_column]
         self.groups = self.training_data[~holdout_index][self.split_column]
 
