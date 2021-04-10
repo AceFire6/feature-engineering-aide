@@ -1,0 +1,5 @@
+[flake8]
+exclude = .git
+ignore = Q001,W503
+import-order-style = google
+max-line-length = 120
