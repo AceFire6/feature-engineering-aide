@@ -1,5 +1,6 @@
 from functools import partial
 
+from environs import Env
 from prompt_toolkit.styles import style_from_dict
 from pygments.token import Token
 from PyInquirer import prompt
@@ -14,6 +15,8 @@ except ImportError:
     from sklearn.naive_bayes import GaussianNB as NaiveBayes
     print("Can't use ComplementNB - using GaussianNB")
 
+
+env = Env()
 
 prompt_style = style_from_dict({
     Token.Separator: '#6C6C6C',
@@ -44,3 +47,7 @@ DATA_TYPE_CHOICES = {
     'Categorical': 'category',
     'Boolean': 'bool',
 }
+
+N_JOBS = env.int('FEA_N_JOBS', default=3)
+TASK_TIME = env.int('FEA_TASK_TIME', default=1800)
+TIME_PER_RUN = TASK_TIME // 10

@@ -5,7 +5,7 @@ from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
 from sklearn.model_selection import LeaveOneGroupOut
 
-from experiment_config.settings import SUPPORTED_METRICS
+from experiment_config.settings import N_JOBS, SUPPORTED_METRICS, TASK_TIME, TIME_PER_RUN
 from experiment_config.utils import (
     parse_experiment_paths,
     print_metric_results_five_number_summary,
@@ -14,10 +14,6 @@ from experiment_config.utils import (
 experiment_input_paths = sys.argv[1:]
 if not experiment_input_paths:
     print('Please pass in experiment files as arguments to this script')
-
-N_JOBS = 3
-TASK_TIME = 1800
-TIME_PER_RUN = TASK_TIME // 10
 
 experiments = parse_experiment_paths(experiment_input_paths)
 
