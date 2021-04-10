@@ -1,8 +1,8 @@
 auto-sklearn==0.12.5
 numpy
-scipy
 pandas
 PyInquirer
 scikit-learn
+scipy
 toml
 tqdm
