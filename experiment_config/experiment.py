@@ -1,10 +1,10 @@
 from collections import defaultdict
+from typing import Any, Dict
 from pathlib import Path
 
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
-from typing import Any, Dict
 
 from experiment_config.settings import SUPPORTED_CLASSIFIERS, SUPPORTED_METRICS
 from experiment_config.utils import get_encoding_from_label
