@@ -83,8 +83,8 @@ data_source_questions = [
 data_source_answers = styled_prompt(data_source_questions)
 
 all_features = (
-    selected_features +
-    [data_source_answers['target'], data_source_answers['data_split_column']]
+    selected_features
+    + [data_source_answers['target'], data_source_answers['data_split_column']]
 )
 feature_data_type_questions = [
     *[
