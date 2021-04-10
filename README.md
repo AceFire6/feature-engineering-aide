@@ -18,13 +18,15 @@ the results to the results of the original experiments.
 
 ## How?
 
+### Installation
+
 To run this, you can either install the requirements locally:
 
 ```shell
 $ pip install -r requirements.txt
 ```
 
-or if these don't work (on MacOS for example)
+or if these don't work (on MacOS for example). [Install Docker](https://docs.docker.com/get-docker/) and then run
 
 ```shell
 $ docker build -t feature-engineering-aide:latest .
