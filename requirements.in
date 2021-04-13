@@ -1,6 +1,7 @@
 auto-sklearn==0.12.5
 environs
 numpy
+orjson
 pandas
 PyInquirer
 scikit-learn
