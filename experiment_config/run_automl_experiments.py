@@ -19,9 +19,9 @@ if not experiment_input_paths:
     print('Please pass in experiment files as arguments to this script')
 
 experiments: List[Experiment] = parse_experiment_paths(experiment_input_paths)
-decision_tree_rfe = partial(RFE, estimator=DecisionTreeClassifier())
 
 for experiment in experiments:
+    decision_tree_rfe = partial(RFE, estimator=DecisionTreeClassifier())
     smol_k_best = partial(SelectKBest, k=len(experiment.prediction_data_columns) // 2)
 
     for preprocessor_class in [None, smol_k_best, SelectPercentile, decision_tree_rfe]:
