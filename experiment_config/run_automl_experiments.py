@@ -60,7 +60,7 @@ for experiment in experiments:
                 metric_result = metric_function(y_test, y_hat)
                 experiment.add_result(metric, metric_result)
 
-        now = f'{datetime.utcnow():%Y-%m-%d_%H:%M:%S}'
+        now = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
 
         if preprocessor_class is None:
             preprocessor_name = 'no_preprocessor'
