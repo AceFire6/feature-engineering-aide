@@ -18,8 +18,12 @@ RUN pip install auto-sklearn==0.12.5 bpython
 WORKDIR /feature_engineering_aide/
 
 # Bring in requirements and install any remaining requirements
-ADD requirements.txt .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
+
+COPY experiment_config experiment_config/
+
+ENV PYTHONPATH /feature_engineering_aide/
 
 ENTRYPOINT ["python"]
 
