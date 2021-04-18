@@ -9,12 +9,10 @@ from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_selection import RFE, SelectKBest, SelectPercentile
 
-from experiment_config.experiment import Experiment
+from experiment_config.experiment import Experiment, parse_experiment_paths
 from experiment_config.settings import N_JOBS, SUPPORTED_METRICS, TASK_TIME, TIME_PER_RUN
-from experiment_config.utils import (
-    parse_experiment_paths,
-    print_metric_results_five_number_summary,
-)
+from experiment_config.utils import print_metric_results_five_number_summary
+
 
 experiment_input_paths = sys.argv[1:]
 if not experiment_input_paths:

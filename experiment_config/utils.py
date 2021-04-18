@@ -6,7 +6,6 @@ from typing import Dict, List, TextIO
 
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
-import toml
 
 
 def extract_headings(data_source: str, headings: List[str]) -> str:
@@ -50,24 +49,6 @@ def get_random_seed(now: datetime) -> int:
 
 def get_encoding_from_label(column: str, label: str, encoders: Dict[str, LabelEncoder]) -> str:
     return encoders[column].transform([label])[0]
-
-
-def parse_experiment_paths(experiment_input_paths: List[str]) -> List['Experiment']:
-    from experiment_config.experiment import Experiment
-
-    experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
-    experiments = []
-
-    for experiment_file_path in experiment_file_paths:
-        if experiment_file_path.is_dir():
-            print(f'Cannot handle {experiment_file_path.absolute()} as it is a directory!')
-            continue
-
-        experiment_config = toml.load(experiment_file_path)
-        experiment = Experiment(experiment_config)
-        experiments.append(experiment)
-
-    return experiments
 
 
 def print_metric_results_five_number_summary(

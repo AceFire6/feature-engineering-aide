@@ -1,10 +1,11 @@
 from collections import defaultdict
-from typing import Any, Dict
+from typing import Any, Dict, List
 from pathlib import Path
 
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
+import toml
 
 from experiment_config.settings import SUPPORTED_CLASSIFIERS, SUPPORTED_METRICS
 from experiment_config.utils import get_encoding_from_label
@@ -82,3 +83,19 @@ class Experiment:
             self.metric_results[metric] = []
 
         self.metric_results[metric].append(result)
+
+
+def parse_experiment_paths(experiment_input_paths: List[str]) -> List[Experiment]:
+    experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
+    experiments = []
+
+    for experiment_file_path in experiment_file_paths:
+        if experiment_file_path.is_dir():
+            print(f'Cannot handle {experiment_file_path.absolute()} as it is a directory!')
+            continue
+
+        experiment_config = toml.load(experiment_file_path)
+        experiment = Experiment(experiment_config, file_path=experiment_file_path)
+        experiments.append(experiment)
+
+    return experiments
