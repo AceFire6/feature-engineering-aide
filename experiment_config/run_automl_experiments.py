@@ -10,7 +10,13 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_selection import RFE, SelectKBest, SelectPercentile
 
 from experiment_config.experiment import Experiment, parse_experiment_paths
-from experiment_config.settings import N_JOBS, SUPPORTED_METRICS, TASK_TIME, TIME_PER_RUN
+from experiment_config.settings import (
+    MEMORY_LIMIT,
+    N_JOBS,
+    SUPPORTED_METRICS,
+    TASK_TIME,
+    TIME_PER_RUN,
+)
 from experiment_config.utils import print_metric_results_five_number_summary
 
 
@@ -31,6 +37,8 @@ def run_experiments(experiments):
                 time_left_for_this_task=TASK_TIME,
                 per_run_time_limit=TIME_PER_RUN,
                 n_jobs=N_JOBS,
+                # Each one of the N_JOBS jobs is allocated MEMORY_LIMIT
+                memory_limit=MEMORY_LIMIT,
                 resampling_strategy=LeaveOneGroupOut,
                 resampling_strategy_arguments={'groups': experiment.groups},
             )
