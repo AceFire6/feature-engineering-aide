@@ -50,11 +50,11 @@ for experiment in experiments:
         leave_one_out = LeaveOneGroupOut()
         test_train_splitter = leave_one_out.split(experiment.X, experiment.y, experiment.groups)
         for train_index, test_index in test_train_splitter:
-            X_train, X_test = experiment.get_x_train_test_split(train_index, test_index)
+            x_train, x_test = experiment.get_x_train_test_split(train_index, test_index)
             y_train, y_test = experiment.get_y_train_test_split(train_index, test_index)
 
-            classifier.refit(X_train, y_train)
-            y_hat = classifier.predict(X_test)
+            classifier.refit(x_train, y_train)
+            y_hat = classifier.predict(x_test)
 
             for metric, metric_function in experiment.metrics.items():
                 metric_result = metric_function(y_test, y_hat)
