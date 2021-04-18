@@ -1,7 +1,7 @@
 timestamp = "2019-06-10T02:10:17.563175"
 random_seed = 0
 experiment = "at_risk"
-data_source = "/Users/jethromuller/masters/feature-engineering-aide/data_files/GradFull.csv"
+data_source = "./data_files/GradFull.csv"
 classifiers = [ "Naive Bayes", "Decision Tree", "Random Forest",]
 metrics = [ "Accuracy", "F1 Score", "Matthew's Correlation Coefficient",]
 
@@ -9,7 +9,7 @@ metrics = [ "Accuracy", "F1 Score", "Matthew's Correlation Coefficient",]
 selected_features = [ "EngBin", "AveSciBin", "AdMathAttempt",]
 target = "GradBin"
 data_split_column = "Application Year"
-holdout_split_condition = "2016"
+holdout_split_condition = 2016
 true_values = [ "Yes", "Pass",]
 false_values = [ "No", "Fail",]
 
