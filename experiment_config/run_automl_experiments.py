@@ -40,12 +40,12 @@ def run_experiments(experiments):
         ]
 
         for preprocessor_class in [None, smol_k_best, SelectPercentile, decision_tree_rfe]:
-            metric_scorer = make_scorer(
-                name='MCC Score',
-                score_func=SUPPORTED_METRICS["Matthew's Correlation Coefficient"],
-                optimum=1.0,
-                worst_possible_result=-1.0,
-            )
+            # metric_scorer = make_scorer(
+            #     name='MCC Score',
+            #     score_func=SUPPORTED_METRICS["Matthew's Correlation Coefficient"],
+            #     optimum=1.0,
+            #     worst_possible_result=-1.0,
+            # )
             classifier = AutoSklearnClassifier(
                 include_preprocessors=['no_preprocessing'],
                 time_left_for_this_task=TASK_TIME,
@@ -69,7 +69,7 @@ def run_experiments(experiments):
                 print(experiment.X.head(1))
                 features_selected = experiment.X.axes
 
-            classifier.fit(experiment.X.copy(), experiment.y.copy(), metric=metric_scorer)
+            classifier.fit(experiment.X.copy(), experiment.y.copy())
 
             leave_one_out = LeaveOneGroupOut()
             test_train_splitter = leave_one_out.split(experiment.X, experiment.y, experiment.groups)
