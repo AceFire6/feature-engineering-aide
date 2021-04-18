@@ -48,6 +48,12 @@ DATA_TYPE_CHOICES = {
     'Boolean': 'bool',
 }
 
-N_JOBS = env.int('FEA_N_JOBS', default=3)
-TASK_TIME = env.int('FEA_TASK_TIME', default=1800)
+N_JOBS = env.int('FEA_N_JOBS', default=4)
+TOTAL_MEMORY_LIMIT = env.int('FEA_TOTAL_MEMORY_LIMIT', default=None)
+TASK_TIME = env.int('FEA_TASK_TIME', default=180)
 TIME_PER_RUN = TASK_TIME // 10
+
+# Default in auto-sklearn AutoSklearnClassifier
+MEMORY_LIMIT = 3072
+if TOTAL_MEMORY_LIMIT is not None:
+    MEMORY_LIMIT = TOTAL_MEMORY_LIMIT // N_JOBS
