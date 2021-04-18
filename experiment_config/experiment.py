@@ -11,8 +11,9 @@ from experiment_config.utils import get_encoding_from_label
 
 
 class Experiment:
-    def __init__(self, experiment_config: Dict[str, Any]):
-        np.random.seed(experiment_config['random_seed'])
+    def __init__(self, experiment_config: Dict[str, Any], file_path: Path = None):
+        self.seed = experiment_config['random_seed']
+        np.random.seed(self.seed)
 
         self.prediction_data_file = Path(experiment_config['data_source'])
 
@@ -65,6 +66,7 @@ class Experiment:
             classifier: SUPPORTED_CLASSIFIERS[classifier]
             for classifier in self._classifiers
         }
+        self.file_path = file_path
 
     def training_set_sample_size(self):
         return self.training_data[self.target_column].size
