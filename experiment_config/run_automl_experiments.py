@@ -5,6 +5,8 @@ from typing import List
 
 from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
+from numpy.ma import MaskedArray
+import orjson
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_selection import RFE, SelectKBest, SelectPercentile
@@ -20,10 +22,22 @@ from experiment_config.settings import (
 from experiment_config.utils import print_metric_results_five_number_summary
 
 
+def serialize_numpy(obj):
+    if isinstance(obj, MaskedArray):
+        return obj.tolist()
+
+    raise TypeError
+
+
 def run_experiments(experiments):
     for experiment in experiments:
         decision_tree_rfe = partial(RFE, estimator=DecisionTreeClassifier())
         smol_k_best = partial(SelectKBest, k=len(experiment.prediction_data_columns) // 2)
+
+        metrics_as_scorers = [
+            make_scorer(name, score_func)
+            for name, score_func in experiment.metrics.items()
+        ]
 
         for preprocessor_class in [None, smol_k_best, SelectPercentile, decision_tree_rfe]:
             metric_scorer = make_scorer(
@@ -41,6 +55,9 @@ def run_experiments(experiments):
                 memory_limit=MEMORY_LIMIT,
                 resampling_strategy=LeaveOneGroupOut,
                 resampling_strategy_arguments={'groups': experiment.groups},
+                # metric=metric_scorer,
+                scoring_functions=metrics_as_scorers,
+                seed=experiment.seed,
             )
 
             # TODO: Ensure this works
@@ -96,6 +113,14 @@ def run_experiments(experiments):
                 results_file.writelines(result_output)
 
                 print_metric_results_five_number_summary(experiment.metric_results, results_file)
+                print(
+                    orjson.dumps(
+                        classifier.cv_results_,
+                        option=orjson.OPT_SERIALIZE_NUMPY,
+                        default=serialize_numpy
+                    ),
+                    file=results_file,
+                )
 
 
 if __name__ == '__main__':
