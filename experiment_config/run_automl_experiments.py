@@ -69,14 +69,23 @@ for experiment in experiments:
         else:
             preprocessor_name = preprocessor_class.__name__
 
-        results_file_name = f'{experiment.name}-{preprocessor_name}_automl_mcc_results_{now}.txt'
+        results_file_name = (
+            f'{experiment.name}-{preprocessor_name}_automl_mcc_results_{now}.txt'
+        )
+        results_file_path = experiment.file_path.parent / 'results' / experiment.name
+        results_file_path.mkdir(parents=True, exist_ok=True)
 
-        with open(results_file_name, 'w') as results_file:
-            print(f'n = {experiment.training_set_sample_size()}', file=results_file)
-            print(f'n_jobs = {N_JOBS}', file=results_file)
-            print(f'total_time = {TASK_TIME}', file=results_file)
-            print(f'time_per_run = {TIME_PER_RUN}', file=results_file)
-            print(f'features_used = {features_selected}', file=results_file)
-            print(classifier.sprint_statistics(), file=results_file)
+        results_file_path_with_name = results_file_path / results_file_name
+
+        with results_file_path_with_name.open('w') as results_file:
+            result_output = [
+                f'n = {experiment.training_set_sample_size()}\n',
+                f'n_jobs = {N_JOBS}\n',
+                f'total_time = {TASK_TIME}\n',
+                f'time_per_run = {TIME_PER_RUN}\n',
+                f'features_used = {features_selected}\n',
+                f'{classifier.sprint_statistics()}\n',
+            ]
+            results_file.writelines(result_output)
 
             print_metric_results_five_number_summary(experiment.metric_results, results_file)
