@@ -58,6 +58,7 @@ class Experiment:
 
         self.name = experiment_config['experiment']
         self.metric_results = {}
+        self.metric_results_labels = {}
 
         self._metrics = experiment_config['metrics']
         self.metrics = {metric: SUPPORTED_METRICS[metric] for metric in self._metrics}
@@ -78,11 +79,13 @@ class Experiment:
     def get_y_train_test_split(self, train_indices, test_indices):
         return self.y.iloc[train_indices], self.y.iloc[test_indices]
 
-    def add_result(self, metric: str, result: float) -> None:
+    def add_result(self, metric: str, result: float, label: str = None) -> None:
         if metric not in self.metric_results:
             self.metric_results[metric] = []
+            self.metric_results_labels[metric] = []
 
         self.metric_results[metric].append(result)
+        self.metric_results_labels[metric].append(label)
 
 
 def parse_experiment_paths(experiment_input_paths: List[str]) -> List[Experiment]:

@@ -82,7 +82,8 @@ def run_experiments(experiments):
 
                 for metric, metric_function in experiment.metrics.items():
                     metric_result = metric_function(y_test, y_hat)
-                    experiment.add_result(metric, metric_result)
+                    split_value = experiment.groups.iloc[test_index].unique()[0]
+                    experiment.add_result(metric, metric_result, label=split_value)
 
             now = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
 
