@@ -13,13 +13,12 @@ holdout_split_condition = 2016
 true_values = [ "Yes", "Pass",]
 false_values = [ "No", "Fail",]
 
-[data.bool_type_features]
-GradBin = "bool"
+[data.features]
+bool = ["GradBin", "AdMathAttempt",]
 
-[data.other_type_features]
-EngBin = "category"
-AveSciBin = "category"
-AdMathAttempt = "category"
+[data.features.ordinal]
+EngBin = ["Low", "Mid", "High",]
+AveSciBin = ["Low", "Mid", "High",]
 
 [data.na_values]
 EngBin = [ "*",]
