@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Dict, List, TextIO
 
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
 
 
 def extract_headings(data_source: str, headings: List[str]) -> str:
@@ -45,10 +44,6 @@ def get_random_seed(now: datetime) -> int:
     # Max value is 10 digits long
     # Only experiments generated at the same second with have the same seed
     return int(now.timestamp())
-
-
-def get_encoding_from_label(column: str, label: str, encoders: Dict[str, LabelEncoder]) -> str:
-    return encoders[column].transform([label])[0]
 
 
 def print_metric_results_five_number_summary(
