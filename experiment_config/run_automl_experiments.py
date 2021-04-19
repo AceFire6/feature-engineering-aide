@@ -87,20 +87,23 @@ def run_experiments(experiments):
                 features_selected_mask = preprocessor.get_support()
                 features_selected = experiment.X.columns[features_selected_mask]
 
-            classifier.fit(experiment.X.copy(), experiment.y.copy())
+            training_data = experiment.X[features_selected].copy()
+            classifier.fit(training_data, experiment.y.copy())
 
             leave_one_out = LeaveOneGroupOut()
-            test_train_splitter = leave_one_out.split(experiment.X, experiment.y, experiment.groups)
+            test_train_splitter = leave_one_out.split(training_data, experiment.y, experiment.groups)
             for train_index, test_index in test_train_splitter:
-                x_train, x_test = experiment.get_x_train_test_split(train_index, test_index)
-                y_train, y_test = experiment.get_y_train_test_split(train_index, test_index)
+                x_train, x_test = experiment.get_split(training_data, train_index, test_index)
+                y_train, y_test = experiment.get_split(experiment.y, train_index, test_index)
+
+                # Value of the group used for splitting
+                split_value = experiment.groups.iloc[test_index].unique()[0]
 
                 classifier.refit(x_train, y_train)
                 y_hat = classifier.predict(x_test)
 
                 for metric, metric_function in experiment.metrics.items():
                     metric_result = metric_function(y_test, y_hat)
-                    split_value = experiment.groups.iloc[test_index].unique()[0]
                     experiment.add_result(metric, metric_result, label=split_value)
 
             results_file_name = (
