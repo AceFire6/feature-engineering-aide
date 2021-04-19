@@ -30,7 +30,14 @@ def serialize_numpy(obj):
 
 
 def run_experiments(experiments):
-    for experiment in experiments:
+    total_experiments = len(experiments)
+    print(f'Running {total_experiments} experiment(s)!')
+
+    for index, experiment in enumerate(experiments):
+        now = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
+        experiment_counter = f'[{index + 1}/{total_experiments}]'
+        print(f'{experiment_counter} Starting experiment {experiment.name} at {now}')
+
         decision_tree_rfe = partial(RFE, estimator=DecisionTreeClassifier())
         smol_k_best = partial(SelectKBest, k=len(experiment.prediction_data_columns) // 2)
 
@@ -39,7 +46,21 @@ def run_experiments(experiments):
             for name, score_func in experiment.metrics.items()
         ]
 
-        for preprocessor_class in [None, smol_k_best, SelectPercentile, decision_tree_rfe]:
+        preprocessor_map = {
+            'no_preprocessor': None,
+            'SelectKBest': smol_k_best,
+            'SelectPercentile': SelectPercentile,
+            'DecisionTreeRFE': decision_tree_rfe,
+        }
+        preprocessor_count = len(preprocessor_map)
+
+        for p_index, (preprocessor_name, preprocessor_class) in enumerate(preprocessor_map.items()):
+            preprocessor_start = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
+            preprocessor_counter = f'[{p_index + 1}/{preprocessor_count}]'
+            print(
+                f'{experiment_counter} Running preprocessor {preprocessor_name} '
+                f'{preprocessor_counter} - experiment {experiment.name} - {preprocessor_start}',
+            )
             # metric_scorer = make_scorer(
             #     name='MCC Score',
             #     score_func=SUPPORTED_METRICS["Matthew's Correlation Coefficient"],
@@ -85,15 +106,6 @@ def run_experiments(experiments):
                     split_value = experiment.groups.iloc[test_index].unique()[0]
                     experiment.add_result(metric, metric_result, label=split_value)
 
-            now = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
-
-            if preprocessor_class is None:
-                preprocessor_name = 'no_preprocessor'
-            elif hasattr(preprocessor_class, 'func'):
-                preprocessor_name = preprocessor_class.func.__name__
-            else:
-                preprocessor_name = preprocessor_class.__name__
-
             results_file_name = (
                 f'{experiment.name}-{preprocessor_name}_automl_mcc_results_{now}.txt'
             )
@@ -108,6 +120,7 @@ def run_experiments(experiments):
                     f'n_jobs = {N_JOBS}\n',
                     f'total_time = {TASK_TIME}\n',
                     f'time_per_run = {TIME_PER_RUN}\n',
+                    f'memory_limit = {MEMORY_LIMIT}\n',
                     f'features_used = {features_selected}\n',
                     f'{classifier.sprint_statistics()}\n',
                 ]
@@ -131,3 +144,4 @@ if __name__ == '__main__':
 
     experiment_list: List[Experiment] = parse_experiment_paths(experiment_input_paths)
     run_experiments(experiment_list)
+    print('Experiments finished!')
