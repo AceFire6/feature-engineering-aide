@@ -41,10 +41,7 @@ def run_experiments(experiments):
         decision_tree_rfe = partial(RFE, estimator=DecisionTreeClassifier())
         smol_k_best = partial(SelectKBest, k=len(experiment.prediction_data_columns) // 2)
 
-        metrics_as_scorers = [
-            make_scorer(name, score_func)
-            for name, score_func in experiment.metrics.items()
-        ]
+        metrics_as_scorers = [make_scorer(name, score_func) for name, score_func in experiment.metrics.items()]
 
         preprocessor_map = {
             'no_preprocessor': None,
@@ -106,12 +103,11 @@ def run_experiments(experiments):
                     metric_result = metric_function(y_test, y_hat)
                     experiment.add_result(metric, metric_result, label=split_value)
 
-            results_file_name = (
-                f'{experiment.name}-{preprocessor_name}_automl_mcc_results_{now}.txt'
-            )
+            # Make results directory if it doesn't exist
             results_file_path = experiment.file_path.parent / 'results' / experiment.name
             results_file_path.mkdir(parents=True, exist_ok=True)
 
+            results_file_name = f'{experiment.name}-{preprocessor_name}_automl_mcc_results_{now}.txt'
             results_file_path_with_name = results_file_path / results_file_name
 
             with results_file_path_with_name.open('w') as results_file:
@@ -128,11 +124,7 @@ def run_experiments(experiments):
 
                 print_metric_results_five_number_summary(experiment.metric_results, results_file)
                 print(
-                    orjson.dumps(
-                        classifier.cv_results_,
-                        option=orjson.OPT_SERIALIZE_NUMPY,
-                        default=serialize_numpy
-                    ),
+                    orjson.dumps(classifier.cv_results_, option=orjson.OPT_SERIALIZE_NUMPY, default=serialize_numpy),
                     file=results_file,
                 )
 
