@@ -102,10 +102,6 @@ class Experiment:
     def training_set_sample_size(self):
         return self.prediction_data[self.target_column].size
 
-    @staticmethod
-    def get_split(dataset, train_indices, test_indices):
-        return dataset.iloc[train_indices], dataset.iloc[test_indices]
-
     def add_result(self, metric: str, result: float, label: str = None) -> None:
         if metric not in self.metric_results:
             self.metric_results[metric] = []
@@ -113,6 +109,10 @@ class Experiment:
 
         self.metric_results[metric].append(result)
         self.metric_results_labels[metric].append(label)
+
+    @staticmethod
+    def get_split(dataset, train_indices, test_indices):
+        return dataset.iloc[train_indices], dataset.iloc[test_indices]
 
 
 def parse_experiment_paths(experiment_input_paths: List[str]) -> List[Experiment]:
