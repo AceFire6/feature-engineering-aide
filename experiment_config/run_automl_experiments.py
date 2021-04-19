@@ -81,14 +81,11 @@ def run_experiments(experiments):
                 seed=experiment.seed,
             )
 
-            # TODO: Ensure this works
-            features_selected = experiment.X.axes
+            features_selected = experiment.prediction_data_columns
             if preprocessor_class is not None:
-                preprocessor = preprocessor_class()
-                preprocessor = preprocessor.fit(experiment.X, experiment.y)
-                preprocessor.transform(experiment.X)
-                print(experiment.X.head(1))
-                features_selected = experiment.X.axes
+                preprocessor = preprocessor_class().fit(experiment.X, experiment.y)
+                features_selected_mask = preprocessor.get_support()
+                features_selected = experiment.X.columns[features_selected_mask]
 
             classifier.fit(experiment.X.copy(), experiment.y.copy())
 
