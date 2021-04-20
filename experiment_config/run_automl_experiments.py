@@ -38,6 +38,23 @@ def run_experiments(experiments):
         experiment_counter = f'[{index + 1}/{total_experiments}]'
         print(f'{experiment_counter} Starting experiment {experiment.name} at {now}')
 
+        # Make results directory if it doesn't exist
+        results_file_path = experiment.file_path.parent / 'results' / experiment.name
+        results_file_path.mkdir(parents=True, exist_ok=True)
+
+        results_file_name = f'{experiment.name}_automl_results_{now}.txt'
+        results_file_path_with_name = results_file_path / results_file_name
+
+        with results_file_path_with_name.open('w') as results_file:
+            results_file.writelines([
+                'Config:\n',
+                f'\tn = {experiment.training_set_sample_size()}\n',
+                f'\tn_jobs = {N_JOBS}\n',
+                f'\ttotal_time = {TASK_TIME}\n',
+                f'\ttime_per_run = {TIME_PER_RUN}\n',
+                f'\tmemory_limit = {MEMORY_LIMIT}\n\n',
+            ])
+
         decision_tree_rfe = partial(RFE, estimator=DecisionTreeClassifier())
         smol_k_best = partial(SelectKBest, k=len(experiment.prediction_data_columns) // 2)
 
@@ -85,7 +102,7 @@ def run_experiments(experiments):
                 features_selected = experiment.X.columns[features_selected_mask]
 
             training_data = experiment.X[features_selected].copy()
-            classifier.fit(training_data, experiment.y.copy())
+            classifier.fit(training_data, experiment.y.copy(), dataset_name=f'{experiment.name} - {preprocessor_name}')
 
             leave_one_out = LeaveOneGroupOut()
             test_train_splitter = leave_one_out.split(training_data, experiment.y, experiment.groups)
@@ -103,30 +120,19 @@ def run_experiments(experiments):
                     metric_result = metric_function(y_test, y_hat)
                     experiment.add_result(metric, metric_result, label=split_value)
 
-            # Make results directory if it doesn't exist
-            results_file_path = experiment.file_path.parent / 'results' / experiment.name
-            results_file_path.mkdir(parents=True, exist_ok=True)
-
-            results_file_name = f'{experiment.name}-{preprocessor_name}_automl_mcc_results_{now}.txt'
-            results_file_path_with_name = results_file_path / results_file_name
-
-            with results_file_path_with_name.open('w') as results_file:
+            with results_file_path_with_name.open('a') as results_file:
+                results_file.write(f'{preprocessor_name}\n')
+                print_metric_results_five_number_summary(experiment.metric_results, results_file)
                 result_output = [
-                    f'n = {experiment.training_set_sample_size()}\n',
-                    f'n_jobs = {N_JOBS}\n',
-                    f'total_time = {TASK_TIME}\n',
-                    f'time_per_run = {TIME_PER_RUN}\n',
-                    f'memory_limit = {MEMORY_LIMIT}\n',
-                    f'features_used = {features_selected}\n',
-                    f'{classifier.sprint_statistics()}\n',
+                    f'\tfeatures_used = {features_selected}\n',
+                    f'\t{classifier.sprint_statistics()}\n\n',
                 ]
                 results_file.writelines(result_output)
 
-                print_metric_results_five_number_summary(experiment.metric_results, results_file)
-                print(
-                    orjson.dumps(classifier.cv_results_, option=orjson.OPT_SERIALIZE_NUMPY, default=serialize_numpy),
-                    file=results_file,
-                )
+                # print(
+                #     orjson.dumps(classifier.cv_results_, option=orjson.OPT_SERIALIZE_NUMPY, default=serialize_numpy),
+                #     file=results_file,
+                # )
 
 
 if __name__ == '__main__':

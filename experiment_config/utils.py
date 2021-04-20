@@ -64,6 +64,6 @@ def print_metric_results_five_number_summary(
             f'Q3: {q3}',
             f'Max: {max_result}',
             sep='\n\t\t',
-            end='\n\n',
+            end='\n',
             file=results_file,
         )
