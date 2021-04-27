@@ -114,7 +114,7 @@ def run_experiments(experiments):
                     experiment.add_result(metric, metric_result, label=split_value)
 
             classifier.refit(training_data, targets)
-            holdout_prediction = classifier.predict(experiment.holdout_x)
+            holdout_prediction = classifier.predict(experiment.holdout_x[features_selected])
             holdout_mcc_result = matthews_corrcoef(experiment.holdout_y, holdout_prediction)
 
             with results_file_path_with_name.open('a') as results_file:
