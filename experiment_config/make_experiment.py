@@ -5,10 +5,10 @@ from typing import Any, Dict
 
 import pandas
 import toml
+from InquirerPy import prompt
 
 from experiment_config.settings import (
     DATA_TYPE_CHOICES,
-    styled_prompt,
     SUPPORTED_CLASSIFIERS,
     SUPPORTED_METRICS,
 )
@@ -81,7 +81,7 @@ data_source_questions = [
     },
 ]
 
-data_source_answers = styled_prompt(data_source_questions)
+data_source_answers = prompt(data_source_questions)
 
 all_features = (
     selected_features
@@ -97,7 +97,7 @@ feature_data_type_questions = [
         } for feature_name, feature_type in DATA_TYPE_CHOICES.items()
     ],
 ]
-feature_type_answers = styled_prompt(feature_data_type_questions)
+feature_type_answers = prompt(feature_data_type_questions)
 
 feature_questions = [
     {
@@ -113,7 +113,7 @@ feature_questions = [
         'filter': get_entries_from_csv_row,
     },
 ]
-feature_answers = styled_prompt(feature_questions)
+feature_answers = prompt(feature_questions)
 
 bool_type_features = {}
 other_type_features = {}
@@ -150,7 +150,7 @@ na_value_questions = [
         } for feature, values in possible_na_values.items() if values
     ],
 ]
-na_value_answers = styled_prompt(na_value_questions)
+na_value_answers = prompt(na_value_questions)
 
 
 def select_classifiers() -> Dict[str, Any]:
@@ -168,7 +168,7 @@ def select_classifiers() -> Dict[str, Any]:
     classifier_answers = None
 
     while classifier_answers is None or len(classifier_answers['classifiers']) == 0:
-        classifier_answers = styled_prompt(classifier_questions)
+        classifier_answers = prompt(classifier_questions)
 
         if len(classifier_answers['classifiers']) == 0:
             print(error_message)
@@ -194,7 +194,7 @@ def select_metrics() -> Dict[str, Any]:
     classifier_answers = None
 
     while classifier_answers is None or len(classifier_answers['metrics']) == 0:
-        classifier_answers = styled_prompt(classifier_questions)
+        classifier_answers = prompt(classifier_questions)
 
         if len(classifier_answers['metrics']) == 0:
             print(error_message)
