@@ -15,7 +15,6 @@ from experiment_config.settings import (
 from experiment_config.utils import (
     extract_headings,
     get_entries_from_csv_row,
-    # get_random_seed,
     set_selected_features,
 )
 
@@ -141,23 +140,6 @@ for feature in feature_type_answers.keys():
             if not value.isalnum():
                 possible_na_values[feature].append(value)
 
-# for feature in feature_type_answers.keys():
-#     unique_values = data[feature].value_counts(normalize=True).to_dict()
-#
-#     unique_value_type_frequency = defaultdict(lambda: {'values': [], 'frequency': 0})
-#     for value, frequency in unique_values.items():
-#         value_type = type(value)
-#         unique_value_type_frequency[value_type]['frequency'] += frequency
-#         unique_value_type_frequency[value_type]['values'].append(value)
-#
-#     possible_na_values[feature] = []
-#     for values_type, values_aggs in unique_value_type_frequency.items():
-#         if values_aggs['frequency'] > 0.2:
-#             continue
-#
-#         possible_na_values[feature].extend(values_aggs['values'])
-
-
 na_value_questions = [
     *[
         {
@@ -228,8 +210,7 @@ now = datetime.now()
 
 config = {
     'timestamp': now.isoformat(),
-    # TODO: Investigate when it makes sense to use a different seed
-    'random_seed': 0,  # get_random_seed(now),
+    'random_seed': 0,
     'experiment': experiment_name,
     'data_source': data_source_answers['data_source'],
     'data': {
