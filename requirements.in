@@ -3,7 +3,7 @@ environs
 numpy
 orjson
 pandas
-PyInquirer
+InquirerPy
 scikit-learn
 scipy
 toml

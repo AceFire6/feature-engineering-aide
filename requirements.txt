@@ -16,25 +16,25 @@ configspace==0.4.18
     # via
     #   auto-sklearn
     #   smac
-cython==0.29.22
+cython==0.29.23
     # via configspace
-dask==2021.4.0
+dask==2021.4.1
     # via
     #   auto-sklearn
     #   distributed
     #   smac
-distributed==2021.4.0
+distributed==2021.4.1
     # via
     #   auto-sklearn
     #   smac
 environs==9.3.2
     # via -r requirements.in
-fsspec==0.9.0
+fsspec==2021.4.0
     # via dask
 heapdict==1.0.1
     # via zict
-importlib-metadata==3.10.1
-    # via fsspec
+inquirerpy==0.1.1
+    # via -r requirements.in
 joblib==1.0.1
     # via
     #   auto-sklearn
@@ -59,7 +59,7 @@ numpy==1.20.2
     #   scikit-learn
     #   scipy
     #   smac
-orjson==3.5.1
+orjson==3.5.2
     # via -r requirements.in
 pandas==1.2.4
     # via
@@ -67,24 +67,20 @@ pandas==1.2.4
     #   auto-sklearn
 partd==1.2.0
     # via dask
-prompt_toolkit==1.0.14
-    # via pyinquirer
+prompt-toolkit==3.0.18
+    # via inquirerpy
 psutil==5.8.0
     # via
     #   distributed
     #   pynisher
     #   smac
-pygments==2.8.1
-    # via pyinquirer
-pyinquirer==1.0.3
-    # via -r requirements.in
 pynisher==0.6.4
     # via
     #   auto-sklearn
     #   smac
 pyparsing==2.4.7
     # via configspace
-pyrfr==0.8.1
+pyrfr==0.8.2
     # via
     #   auto-sklearn
     #   smac
@@ -99,14 +95,12 @@ pyyaml==5.4.1
     #   auto-sklearn
     #   dask
     #   distributed
-regex==2021.4.4
-    # via pyinquirer
 scikit-learn==0.24.1
     # via
     #   -r requirements.in
     #   auto-sklearn
     #   smac
-scipy==1.6.2
+scipy==1.6.3
     # via
     #   -r requirements.in
     #   auto-sklearn
@@ -115,7 +109,6 @@ scipy==1.6.2
 six==1.15.0
     # via
     #   lazy-import
-    #   prompt-toolkit
     #   python-dateutil
 smac==0.13.1
     # via auto-sklearn
@@ -136,14 +129,10 @@ tornado==6.1
     # via distributed
 tqdm==4.60.0
     # via -r requirements.in
-typing-extensions==3.7.4.3
-    # via importlib-metadata
 wcwidth==0.2.5
     # via prompt-toolkit
 zict==2.0.0
     # via distributed
-zipp==3.4.1
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
