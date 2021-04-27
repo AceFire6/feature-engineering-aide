@@ -69,9 +69,10 @@ data_source_questions = [
         ),
     },
     {
-        'type': 'input',
+        'type': 'list',
         'name': 'data_split_column',
-        'message': 'Enter column on which to test the condition to create the holdout dataset',
+        'message': 'Select the column on which to test the condition to create the holdout dataset',
+        'choices': data_source_headings,
     },
     {
         'type': 'input',
