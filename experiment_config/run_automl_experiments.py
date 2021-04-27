@@ -6,7 +6,6 @@ from typing import List
 from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
 from numpy.ma import MaskedArray
-import orjson
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_selection import RFE, SelectKBest, SelectPercentile
@@ -128,11 +127,6 @@ def run_experiments(experiments):
                     f'\t{classifier.sprint_statistics()}\n\n',
                 ]
                 results_file.writelines(result_output)
-
-                # print(
-                #     orjson.dumps(classifier.cv_results_, option=orjson.OPT_SERIALIZE_NUMPY, default=serialize_numpy),
-                #     file=results_file,
-                # )
 
 
 if __name__ == '__main__':
