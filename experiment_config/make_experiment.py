@@ -90,12 +90,11 @@ all_features = (
 feature_data_type_questions = [
     *[
         {
-            'type': 'list',
-            'name': feature,
-            'message': f'Select the data type for column: {feature}',
-            'choices': DATA_TYPE_CHOICES.keys(),
-            'filter': lambda answer: DATA_TYPE_CHOICES[answer],
-        } for feature in all_features
+            'type': 'checkbox',
+            'name': feature_type,
+            'message': f'Select the columns that are {feature_name}',
+            'choices': all_features,
+        } for feature_name, feature_type in DATA_TYPE_CHOICES.items()
     ],
 ]
 feature_type_answers = styled_prompt(feature_data_type_questions)
@@ -132,7 +131,7 @@ data = pandas.read_csv(
 )
 
 possible_na_values = {}
-for feature in feature_type_answers.keys():
+for feature in all_features:
     possible_na_values[feature] = []
 
     unique_values = data[feature].unique()
@@ -219,9 +218,8 @@ config = {
         'target': data_source_answers['target'],
         'data_split_column': data_source_answers['data_split_column'],
         'holdout_split_condition': data_source_answers['holdout_split_condition'],
-        'bool_type_features': bool_type_features,
-        'other_type_features': other_type_features,
         'na_values': na_value_answers,
+        'features': feature_type_answers,
         **feature_answers,
     },
     **classifier_choices,
