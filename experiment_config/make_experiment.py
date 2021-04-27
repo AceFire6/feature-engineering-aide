@@ -35,10 +35,11 @@ data_source_questions = [
         ),
     },
     {
-        'type': 'input',
+        'type': 'filepath',
         'name': 'data_source',
         'message': 'Specify path to a CSV data file',
-        'validate': lambda answer: 'Enter a valid path' if not Path(answer).exists() else True,
+        'validate': lambda answer: Path(answer).exists(),
+        'invalid_message': 'Enter a valid path',
         'filter': lambda answer: extract_headings(answer, data_source_headings),
     },
     {
