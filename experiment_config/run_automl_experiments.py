@@ -5,7 +5,6 @@ from typing import List
 
 from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
-from numpy.ma import MaskedArray
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_selection import RFE, SelectKBest, SelectPercentile
@@ -19,13 +18,6 @@ from experiment_config.settings import (
     TIME_PER_RUN,
 )
 from experiment_config.utils import print_metric_results_five_number_summary
-
-
-def serialize_numpy(obj):
-    if isinstance(obj, MaskedArray):
-        return obj.tolist()
-
-    raise TypeError
 
 
 def run_experiments(experiments):
