@@ -95,7 +95,13 @@ def run_experiments(experiments):
 
             training_data = experiment.X[features_selected].copy()
             targets = experiment.y.copy()
-            classifier.fit(training_data, targets, dataset_name=f'{experiment.name} - {preprocessor_name}')
+            classifier.fit(
+                X=training_data,
+                y=targets,
+                X_test=experiment.holdout_x[features_selected],
+                y_test=experiment.holdout_y,
+                dataset_name=f'{experiment.name} - {preprocessor_name}',
+            )
 
             leave_one_out = LeaveOneGroupOut()
             test_train_splitter = leave_one_out.split(training_data, targets, experiment.groups)
