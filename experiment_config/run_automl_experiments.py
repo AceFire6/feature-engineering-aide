@@ -5,6 +5,7 @@ from typing import List
 
 from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
+from sklearn.metrics import matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_selection import RFE, SelectKBest, SelectPercentile
@@ -93,13 +94,14 @@ def run_experiments(experiments):
                 features_selected = [column for column in experiment.X.columns[features_selected_mask]]
 
             training_data = experiment.X[features_selected].copy()
-            classifier.fit(training_data, experiment.y.copy(), dataset_name=f'{experiment.name} - {preprocessor_name}')
+            targets = experiment.y.copy()
+            classifier.fit(training_data, targets, dataset_name=f'{experiment.name} - {preprocessor_name}')
 
             leave_one_out = LeaveOneGroupOut()
-            test_train_splitter = leave_one_out.split(training_data, experiment.y, experiment.groups)
+            test_train_splitter = leave_one_out.split(training_data, targets, experiment.groups)
             for train_index, test_index in test_train_splitter:
                 x_train, x_test = experiment.get_split(training_data, train_index, test_index)
-                y_train, y_test = experiment.get_split(experiment.y, train_index, test_index)
+                y_train, y_test = experiment.get_split(targets, train_index, test_index)
 
                 # Value of the group used for splitting
                 split_value = experiment.groups.iloc[test_index].unique()[0]
@@ -111,12 +113,17 @@ def run_experiments(experiments):
                     metric_result = metric_function(y_test, y_hat)
                     experiment.add_result(metric, metric_result, label=split_value)
 
+            classifier.refit(training_data, targets)
+            holdout_prediction = classifier.predict(experiment.holdout_x)
+            holdout_mcc_result = matthews_corrcoef(experiment.holdout_y, holdout_prediction)
+
             with results_file_path_with_name.open('a') as results_file:
                 preprocessor_time_taken = datetime.now() - preprocessor_start
                 result_output = [
                     f'{preprocessor_name}\n',
                     f'\ttime_taken = {preprocessor_time_taken}\n',
                     f'\tfeatures_used = {features_selected}\n',
+                    f'\tholdout_mcc_result = {holdout_mcc_result}\n',
                     f'\t{classifier.sprint_statistics()}\n\n',
                 ]
                 results_file.writelines(result_output)
