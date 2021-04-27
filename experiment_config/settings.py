@@ -26,7 +26,9 @@ SUPPORTED_METRICS = {
     "Matthew's Correlation Coefficient": matthews_corrcoef,
 }
 
+ORDINAL = 'ordinal'
 DATA_TYPE_CHOICES = {
+    'Ordinal': ORDINAL,
     'Categorical': 'category',
     'Boolean': 'bool',
 }
