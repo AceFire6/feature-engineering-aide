@@ -68,11 +68,11 @@ def run_experiments(experiments):
         preprocessor_count = len(preprocessor_map)
 
         for p_index, (preprocessor_name, preprocessor_class) in enumerate(preprocessor_map.items()):
-            preprocessor_start = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
+            preprocessor_start = datetime.now()
             preprocessor_counter = f'[{p_index + 1}/{preprocessor_count}]'
             print(
                 f'{experiment_counter} Running preprocessor {preprocessor_name} '
-                f'{preprocessor_counter} - experiment {experiment.name} - {preprocessor_start}',
+                f'{preprocessor_counter} - experiment {experiment.name} - {preprocessor_start:%Y-%m-%d_%H:%M:%S}',
             )
             # metric_scorer = make_scorer(
             #     name='MCC Score',
@@ -98,7 +98,7 @@ def run_experiments(experiments):
             if preprocessor_class is not None:
                 preprocessor = preprocessor_class().fit(experiment.X, experiment.y)
                 features_selected_mask = preprocessor.get_support()
-                features_selected = experiment.X.columns[features_selected_mask]
+                features_selected = [column for column in experiment.X.columns[features_selected_mask]]
 
             training_data = experiment.X[features_selected].copy()
             classifier.fit(training_data, experiment.y.copy(), dataset_name=f'{experiment.name} - {preprocessor_name}')
@@ -120,13 +120,15 @@ def run_experiments(experiments):
                     experiment.add_result(metric, metric_result, label=split_value)
 
             with results_file_path_with_name.open('a') as results_file:
-                results_file.write(f'{preprocessor_name}\n')
-                print_metric_results_five_number_summary(experiment.metric_results, results_file)
+                preprocessor_time_taken = datetime.now() - preprocessor_start
                 result_output = [
+                    f'{preprocessor_name}\n',
+                    f'\ttime_taken = {preprocessor_time_taken}\n',
                     f'\tfeatures_used = {features_selected}\n',
                     f'\t{classifier.sprint_statistics()}\n\n',
                 ]
                 results_file.writelines(result_output)
+                print_metric_results_five_number_summary(experiment.metric_results, results_file)
 
 
 if __name__ == '__main__':
