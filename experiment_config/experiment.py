@@ -85,6 +85,9 @@ class Experiment:
         self.y = self.prediction_data[~holdout_index][self.target_column]
         self.groups = self.prediction_data[~holdout_index][self.split_column]
 
+        self.holdout_x = self.prediction_data[holdout_index][self.prediction_data_columns]
+        self.holdout_y = self.prediction_data[holdout_index][self.target_column]
+
         self.name = experiment_config['experiment']
         self.metric_results = {}
         self.metric_results_labels = {}
