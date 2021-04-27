@@ -196,7 +196,7 @@ def select_metrics() -> Dict[str, Any]:
             'type': 'checkbox',
             'name': 'metrics',
             'message': 'Select Metrics',
-            'choices': [{'name': name} for name in SUPPORTED_METRICS.keys()],
+            'choices': SUPPORTED_METRICS.keys(),
         },
     ]
 
