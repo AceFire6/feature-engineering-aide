@@ -11,6 +11,7 @@ from experiment_config.settings import (
     DATA_TYPE_CHOICES,
     SUPPORTED_CLASSIFIERS,
     SUPPORTED_METRICS,
+    ORDINAL,
 )
 from experiment_config.utils import (
     extract_headings,
@@ -143,6 +144,22 @@ na_value_questions = [
     ],
 ]
 na_value_answers = prompt(na_value_questions)
+
+data = data.replace(na_value_answers, pd.NA).dropna()
+
+if ORDINAL in feature_type_answers:
+    ordinals = {}
+    for ordinal_feature in feature_type_answers[ORDINAL]:
+        options = ', '.join(option for option in data[ordinal_feature].unique())
+        ordinal_ordering = prompt({
+            'type': 'input',
+            'name': ordinal_feature,
+            'message': f'Select the order of the ordinal values in column {ordinal_feature} - {options=} (as CSV)',
+            'filter': get_entries_from_csv_row,
+        })
+        ordinals.update(ordinal_ordering)
+
+    feature_type_answers[ORDINAL] = ordinals
 
 
 def select_classifiers() -> Dict[str, Any]:
