@@ -56,7 +56,7 @@ data_source_questions = [
         'type': 'checkbox',
         'name': 'selected_features',
         'message': 'Select which of the columns you wish to use as features',
-        'choices': ({'name': name} for name in data_source_headings),
+        'choices': data_source_headings,
         'filter': lambda answer: set_selected_features(answer, selected_features),
     },
     {
@@ -64,7 +64,7 @@ data_source_questions = [
         'name': 'target',
         'message': 'Select which column you wish to use as the target',
         'choices': (
-            {'name': name}
+            name
             for name in data_source_headings
             if name not in selected_features
         ),
@@ -164,7 +164,7 @@ na_value_questions = [
             'type': 'checkbox',
             'name': feature,
             'message': f'Select NA values for: {feature}',
-            'choices': [{'name': name} for name in values],
+            'choices': values,
         } for feature, values in possible_na_values.items() if values
     ],
 ]
@@ -179,7 +179,7 @@ def select_classifiers() -> Dict[str, Any]:
             'type': 'checkbox',
             'name': 'classifiers',
             'message': 'Select Classifiers',
-            'choices': [{'name': name} for name in SUPPORTED_CLASSIFIERS.keys()],
+            'choices': SUPPORTED_CLASSIFIERS.keys(),
         },
     ]
 
