@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict
 
-import pandas
+import pandas as pd
 import toml
 from InquirerPy import prompt
 
@@ -115,7 +115,7 @@ feature_questions = [
 ]
 feature_answers = prompt(feature_questions)
 
-data = pandas.read_csv(
+data = pd.read_csv(
     filepath_or_buffer=data_source_answers['data_source'],
     usecols=all_features,
     true_values=feature_answers['true_values'],
