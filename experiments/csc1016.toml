@@ -1,7 +1,7 @@
 timestamp = "2019-06-10T02:01:49.382603"
 random_seed = 0
 experiment = "csc1016"
-data_source = "/Users/jethromuller/masters/feature-engineering-aide/data_files/CSCFull.csv"
+data_source = "./data_files/CSCFull.csv"
 classifiers = [ "Naive Bayes", "Decision Tree", "Random Forest",]
 metrics = [ "Accuracy", "F1 Score", "Matthew's Correlation Coefficient",]
 
@@ -13,17 +13,14 @@ holdout_split_condition = 2016
 true_values = [ "Yes", "Pass",]
 false_values = [ "No", "Fail",]
 
-[data.bool_type_features]
-CSCBin = "bool"
+[data.features]
+bool = ["CSCBin", "AdMathAttempt", "FinAid"]
+categorical = ["Province", "Quintile"]
 
-[data.other_type_features]
-AveSciBin = "category"
-EngBin = "category"
-ALQLBin = "category"
-AdMathAttempt = "category"
-FinAid = "category"
-Province = "category"
-Quintile = "category"
+[data.features.ordinal]
+AveSciBin = ["Low", "Mid", "High"]
+EngBin = ["Low", "Mid", "High"]
+ALQLBin = ["Low", "Mid", "High"]
 
 [data.na_values]
 EngBin = [ "*",]
