@@ -115,14 +115,6 @@ feature_questions = [
 ]
 feature_answers = prompt(feature_questions)
 
-bool_type_features = {}
-other_type_features = {}
-for feature, type_name in feature_type_answers.items():
-    if type_name == DATA_TYPE_CHOICES['Boolean']:
-        bool_type_features[feature] = type_name
-    else:
-        other_type_features[feature] = type_name
-
 data = pandas.read_csv(
     filepath_or_buffer=data_source_answers['data_source'],
     usecols=all_features,
