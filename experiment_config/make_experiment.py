@@ -27,18 +27,15 @@ data_source_questions = [
         'type': 'input',
         'name': 'experiment_name',
         'message': 'Specify the name of the experiment',
-        'validate': lambda answer: (
-            'Experiment with that name already exists'
-            if Path(f'{answer}.toml').exists()
-            else True
-        ),
+        'validate': lambda answer: not Path(f'{answer}.toml').exists(),
+        'invalid_message': 'Experiment with that name already exists',
     },
     {
         'type': 'filepath',
         'name': 'data_source',
         'message': 'Specify path to a CSV data file',
-        'validate': lambda answer: Path(answer).exists(),
-        'invalid_message': 'Enter a valid path',
+        'validate': lambda answer: Path(answer).exists() and Path(answer).is_file(),
+        'invalid_message': 'Enter a valid CSV file path',
         'filter': lambda answer: extract_headings(answer, data_source_headings),
     },
     {
