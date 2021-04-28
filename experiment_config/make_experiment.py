@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
 
 import pandas as pd
 import toml
@@ -162,56 +161,29 @@ if ORDINAL in feature_type_answers:
     feature_type_answers[ORDINAL] = ordinals
 
 
-def select_classifiers() -> Dict[str, Any]:
-    error_message = 'Choose at least 1 classifier'
+classifier_question = [
+    {
+        'type': 'checkbox',
+        'name': 'classifiers',
+        'message': 'Select Classifiers',
+        'choices': SUPPORTED_CLASSIFIERS.keys(),
+        'validate': lambda result: len(result) > 0,
+        'invalid_message': 'Choose at least 1 classifier',
+    },
+]
+classifier_choices = prompt(classifier_question)
 
-    classifier_questions = [
-        {
-            'type': 'checkbox',
-            'name': 'classifiers',
-            'message': 'Select Classifiers',
-            'choices': SUPPORTED_CLASSIFIERS.keys(),
-        },
-    ]
-
-    classifier_answers = None
-
-    while classifier_answers is None or len(classifier_answers['classifiers']) == 0:
-        classifier_answers = prompt(classifier_questions)
-
-        if len(classifier_answers['classifiers']) == 0:
-            print(error_message)
-
-    return classifier_answers
-
-
-classifier_choices = select_classifiers()
-
-
-def select_metrics() -> Dict[str, Any]:
-    error_message = 'Choose at least 1 metric'
-
-    classifier_questions = [
-        {
-            'type': 'checkbox',
-            'name': 'metrics',
-            'message': 'Select Metrics',
-            'choices': SUPPORTED_METRICS.keys(),
-        },
-    ]
-
-    classifier_answers = None
-
-    while classifier_answers is None or len(classifier_answers['metrics']) == 0:
-        classifier_answers = prompt(classifier_questions)
-
-        if len(classifier_answers['metrics']) == 0:
-            print(error_message)
-
-    return classifier_answers
-
-
-metric_choices = select_metrics()
+metric_question = [
+    {
+        'type': 'checkbox',
+        'name': 'metrics',
+        'message': 'Select Metrics',
+        'choices': SUPPORTED_METRICS.keys(),
+        'validate': lambda result: len(result) > 0,
+        'invalid_message': 'Choose at least 1 metric',
+    },
+]
+metric_choices = prompt(metric_question)
 
 experiment_name = data_source_answers['experiment_name']
 
