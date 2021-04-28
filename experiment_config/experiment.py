@@ -55,6 +55,10 @@ class Experiment:
         # Do OrdinalEncoding
         self.ordinal_encoded_cols = defaultdict()
         for column, category_ordering in self.ordinal_features.items():
+            # Skip holdout column
+            if column == self.split_column:
+                continue
+
             self.prediction_data[column].cat.set_categories(
                 category_ordering,
                 ordered=True,
@@ -65,6 +69,10 @@ class Experiment:
 
         # Do OneHotEncoding
         if self.categorical_features:
+            # Remove holdout column before encoding
+            if self.split_column in self.categorical_features:
+                self.categorical_features.remove(self.split_column)
+
             self.prediction_data = pd.get_dummies(
                 self.prediction_data,
                 columns=self.categorical_features,
