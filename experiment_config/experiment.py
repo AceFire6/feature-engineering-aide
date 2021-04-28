@@ -20,9 +20,9 @@ class Experiment:
         self.prediction_false_values = experiment_config['data']['false_values']
 
         self.feature_map = experiment_config['data']['features']
-        self.boolean_features = self.feature_map.get('bool', [])
-        self.ordinal_features = self.feature_map.get('ordinal', {})
-        self.categorical_features = self.feature_map.get('categorical', [])
+        self.boolean_features: List[str] = self.feature_map.get('bool', [])
+        self.ordinal_features: Dict[str, List[str]] = self.feature_map.get('ordinal', {})
+        self.categorical_features: List[str] = self.feature_map.get('categorical', [])
 
         # We exclude booleans because we set those after the NA values are removed
         self._categorical_columns = self.categorical_features + list(self.ordinal_features.keys())
