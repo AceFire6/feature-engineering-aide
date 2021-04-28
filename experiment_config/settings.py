@@ -29,7 +29,7 @@ SUPPORTED_METRICS = {
 ORDINAL = 'ordinal'
 DATA_TYPE_CHOICES = {
     'Ordinal': ORDINAL,
-    'Categorical': 'category',
+    'Categorical': 'categorical',
     'Boolean': 'bool',
 }
 
