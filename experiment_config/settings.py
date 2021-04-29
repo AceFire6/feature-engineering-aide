@@ -28,9 +28,9 @@ SUPPORTED_METRICS = {
 
 ORDINAL = 'ordinal'
 DATA_TYPE_CHOICES = {
+    'Boolean': 'bool',
     'Ordinal': ORDINAL,
     'Categorical': 'categorical',
-    'Boolean': 'bool',
 }
 
 N_JOBS = env.int('FEA_N_JOBS', default=4)
