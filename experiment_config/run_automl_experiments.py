@@ -14,6 +14,7 @@ from experiment_config.settings import (
     SUPPORTED_METRICS,
     TASK_TIME,
     TIME_PER_RUN,
+    TOTAL_MEMORY_LIMIT,
 )
 from experiment_config.utils import print_metric_results_five_number_summary
 
@@ -26,7 +27,8 @@ def run_experiments(experiments):
         f'\tn_jobs = {N_JOBS}',
         f'\ttotal_time = {TASK_TIME}',
         f'\ttime_per_run = {TIME_PER_RUN}',
-        f'\tmemory_limit = {MEMORY_LIMIT}\n',
+        f'\ttotal_memory_limit = {TOTAL_MEMORY_LIMIT}',
+        f'\tmemory_limit_per_run = {MEMORY_LIMIT}',
         sep='\n',
     )
 
@@ -49,7 +51,8 @@ def run_experiments(experiments):
                 f'\tn_jobs = {N_JOBS}\n',
                 f'\ttotal_time = {TASK_TIME}\n',
                 f'\ttime_per_run = {TIME_PER_RUN}\n',
-                f'\tmemory_limit = {MEMORY_LIMIT}\n\n',
+                f'\ttotal_memory_limit = {TOTAL_MEMORY_LIMIT}\n',
+                f'\tmemory_limit_per_run = {MEMORY_LIMIT}\n\n',
             ])
 
         metrics_as_scorers = [make_scorer(name, score_func) for name, score_func in experiment.metrics.items()]
