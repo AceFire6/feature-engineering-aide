@@ -1,5 +1,8 @@
+from functools import partial
+
 from environs import Env
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_selection import RFE, SelectKBest, SelectPercentile
 from sklearn.metrics import accuracy_score, f1_score, matthews_corrcoef
 from sklearn.tree import DecisionTreeClassifier
 
@@ -24,6 +27,13 @@ SUPPORTED_METRICS = {
     'Accuracy': accuracy_score,
     'F1 Score': f1_score,
     "Matthew's Correlation Coefficient": matthews_corrcoef,
+}
+
+SUPPORTED_FEATURE_PREPROCESSORS = {
+    'no_preprocessor': None,
+    'SelectKBest': SelectKBest,
+    'SelectPercentile': SelectPercentile,
+    'DecisionTreeRFE': partial(RFE, estimator=DecisionTreeClassifier()),
 }
 
 ORDINAL = 'ordinal'
