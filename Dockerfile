@@ -20,7 +20,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py
 RUN apt install -y build-essential
 
 # Install auto-sklearn
-RUN pip install auto-sklearn==0.12.5 bpython
+RUN pip install auto-sklearn==0.12.6 bpython
 
 # Change to working directory
 WORKDIR /feature_engineering_aide/
