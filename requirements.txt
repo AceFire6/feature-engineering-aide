@@ -4,36 +4,56 @@
 #
 #    pip-compile requirements.in
 #
-auto-sklearn==0.12.5
+auto-sklearn==0.12.6
     # via -r requirements.in
-click==7.1.2
+blessings==1.7
+    # via curtsies
+bpython==0.21
+    # via -r requirements.in
+certifi==2020.12.5
+    # via requests
+chardet==4.0.0
+    # via requests
+click==8.0.1
     # via distributed
 cloudpickle==1.6.0
     # via
     #   dask
     #   distributed
-configspace==0.4.18
+configspace==0.4.19
     # via
     #   auto-sklearn
     #   smac
+curtsies==0.3.5
+    # via bpython
+cwcwidth==0.1.4
+    # via
+    #   bpython
+    #   curtsies
 cython==0.29.23
     # via configspace
-dask==2021.4.1
+dask==2021.05.1
     # via
     #   auto-sklearn
     #   distributed
     #   smac
-distributed==2021.4.1
+distributed==2021.5.1
     # via
     #   auto-sklearn
     #   smac
 environs==9.3.2
     # via -r requirements.in
-fsspec==2021.4.0
+fsspec==2021.5.0
     # via dask
+greenlet==1.1.0
+    # via bpython
 heapdict==1.0.1
     # via zict
-inquirerpy==0.1.1
+idna==2.10
+    # via requests
+importlib-metadata==4.3.1
+    # via click
+inquirerpy==0.2.0
     # via -r requirements.in
 joblib==1.0.1
     # via
@@ -46,11 +66,11 @@ liac-arff==2.5.0
     # via auto-sklearn
 locket==0.2.1
     # via partd
-marshmallow==3.11.1
+marshmallow==3.12.1
     # via environs
 msgpack==1.0.2
     # via distributed
-numpy==1.20.2
+numpy==1.20.3
     # via
     #   -r requirements.in
     #   auto-sklearn
@@ -74,6 +94,8 @@ psutil==5.8.0
     #   distributed
     #   pynisher
     #   smac
+pygments==2.9.0
+    # via bpython
 pynisher==0.6.4
     # via
     #   auto-sklearn
@@ -86,16 +108,20 @@ pyrfr==0.8.2
     #   smac
 python-dateutil==2.8.1
     # via pandas
-python-dotenv==0.17.0
+python-dotenv==0.17.1
     # via environs
 pytz==2021.1
     # via pandas
+pyxdg==0.27
+    # via bpython
 pyyaml==5.4.1
     # via
     #   auto-sklearn
     #   dask
     #   distributed
-scikit-learn==0.24.1
+requests==2.25.1
+    # via bpython
+scikit-learn==0.24.2
     # via
     #   -r requirements.in
     #   auto-sklearn
@@ -106,13 +132,14 @@ scipy==1.6.3
     #   auto-sklearn
     #   scikit-learn
     #   smac
-six==1.15.0
+six==1.16.0
     # via
+    #   blessings
     #   lazy-import
     #   python-dateutil
 smac==0.13.1
     # via auto-sklearn
-sortedcontainers==2.3.0
+sortedcontainers==2.4.0
     # via distributed
 tblib==1.7.0
     # via distributed
@@ -127,12 +154,18 @@ toolz==0.11.1
     #   partd
 tornado==6.1
     # via distributed
-tqdm==4.60.0
+tqdm==4.61.0
     # via -r requirements.in
+typing-extensions==3.10.0.0
+    # via importlib-metadata
+urllib3==1.26.5
+    # via requests
 wcwidth==0.2.5
     # via prompt-toolkit
 zict==2.0.0
     # via distributed
+zipp==3.4.1
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
