@@ -1,7 +1,5 @@
 FROM python:3.9-slim
 
-ARG TZ=Africa/Johannesburg
-
 # Change to working directory
 WORKDIR /feature_engineering_aide/
 
@@ -27,6 +25,8 @@ RUN pip install -r requirements.txt
 COPY experiment_config experiment_config/
 
 ENV PYTHONPATH /feature_engineering_aide/
+
+ARG TZ=Africa/Johannesburg
 
 RUN echo $TZ > /etc/timezone
 ENV PYTHONUNBUFFERED 1
