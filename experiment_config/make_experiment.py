@@ -9,6 +9,7 @@ from InquirerPy import inquirer
 from experiment_config.settings import (
     DATA_TYPE_CHOICES,
     SUPPORTED_CLASSIFIERS,
+    SUPPORTED_FEATURE_PREPROCESSORS,
     SUPPORTED_METRICS,
     ORDINAL,
 )
@@ -159,6 +160,13 @@ metric_choices = inquirer.checkbox(
     invalid_message='Choose at least 1 metric!',
 ).execute()
 
+feature_selection_strategies = inquirer.checkbox(
+    message='Select Feature Selection Strategies',
+    choices=SUPPORTED_FEATURE_PREPROCESSORS.keys(),
+    validate=is_not_empty,
+    invalid_message='Choose at least 1 selection strategy!',
+).execute()
+
 now = datetime.now()
 config = {
     'timestamp': now.isoformat(),
@@ -177,6 +185,7 @@ config = {
     },
     'classifiers': classifier_choices,
     'metrics': metric_choices,
+    'feature_selection_strategies': feature_selection_strategies,
 }
 
 with open(f'{experiment_name}.toml', 'w') as config_file:
