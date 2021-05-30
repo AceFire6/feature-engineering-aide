@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import toml
 
-from experiment_config.settings import SUPPORTED_CLASSIFIERS, SUPPORTED_METRICS
+from experiment_config.settings import SUPPORTED_CLASSIFIERS, SUPPORTED_FEATURE_PREPROCESSORS, SUPPORTED_METRICS
 
 
 class Experiment:
@@ -102,6 +102,12 @@ class Experiment:
 
         self._metrics = experiment_config['metrics']
         self.metrics = {metric: SUPPORTED_METRICS[metric] for metric in self._metrics}
+
+        self._feature_preprocessors = experiment_config['feature_selection_strategies']
+        self.feature_preprocessors = {
+            preprocessor: SUPPORTED_FEATURE_PREPROCESSORS[preprocessor]
+            for preprocessor in self._feature_preprocessors
+        }
 
         self._classifiers = experiment_config['classifiers']
         self.classifiers = {
