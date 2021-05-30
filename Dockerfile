@@ -19,11 +19,13 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py
 # Necessary installation to compile auto-sklearn dependencies
 RUN apt install -y build-essential
 
-# Install auto-sklearn
-RUN pip install auto-sklearn==0.12.6 bpython
-
 # Change to working directory
 WORKDIR /feature_engineering_aide/
+
+# Install auto-sklearn
+RUN python -m venv venv/
+ENV PATH="/feature_engineering_aide/venv/bin:$PATH"
+RUN pip install auto-sklearn==0.12.6
 
 # Bring in requirements and install any remaining requirements
 COPY requirements.txt .
