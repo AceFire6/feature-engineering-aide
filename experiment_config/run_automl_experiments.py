@@ -20,7 +20,15 @@ from experiment_config.utils import print_metric_results_five_number_summary
 
 def run_experiments(experiments):
     total_experiments = len(experiments)
-    print(f'Running {total_experiments} experiment(s)!')
+    print(
+        f'Running {total_experiments} experiment(s)!',
+        'Config:',
+        f'\tn_jobs = {N_JOBS}',
+        f'\ttotal_time = {TASK_TIME}',
+        f'\ttime_per_run = {TIME_PER_RUN}',
+        f'\tmemory_limit = {MEMORY_LIMIT}\n',
+        sep='\n',
+    )
 
     for index, experiment in enumerate(experiments):
         now = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
