@@ -1,5 +1,4 @@
 from datetime import datetime
-from functools import partial
 import sys
 from typing import List
 
@@ -7,8 +6,6 @@ from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
 from sklearn.metrics import matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.feature_selection import RFE, SelectKBest, SelectPercentile
 
 from experiment_config.experiment import Experiment, parse_experiment_paths
 from experiment_config.settings import (
@@ -47,20 +44,10 @@ def run_experiments(experiments):
                 f'\tmemory_limit = {MEMORY_LIMIT}\n\n',
             ])
 
-        decision_tree_rfe = partial(RFE, estimator=DecisionTreeClassifier())
-        smol_k_best = partial(SelectKBest, k=len(experiment.prediction_data_columns) // 2)
-
         metrics_as_scorers = [make_scorer(name, score_func) for name, score_func in experiment.metrics.items()]
 
-        preprocessor_map = {
-            'no_preprocessor': None,
-            'SelectKBest': smol_k_best,
-            'SelectPercentile': SelectPercentile,
-            'DecisionTreeRFE': decision_tree_rfe,
-        }
-        preprocessor_count = len(preprocessor_map)
-
-        for p_index, (preprocessor_name, preprocessor_class) in enumerate(preprocessor_map.items()):
+        preprocessor_count = len(experiment.feature_preprocessors)
+        for p_index, (preprocessor_name, preprocessor_class) in enumerate(experiment.feature_preprocessors.items()):
             preprocessor_start = datetime.now()
             preprocessor_counter = f'[{p_index + 1}/{preprocessor_count}]'
             print(
