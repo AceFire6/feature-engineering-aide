@@ -23,6 +23,7 @@ class ScorerProtocol(Protocol):
 
 class Experiment:
     seed: int
+    start_time: Optional[str] = None
     prediction_data_file: Path
 
     prediction_true_values: list[str]
