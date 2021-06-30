@@ -1,16 +1,58 @@
 from collections import defaultdict
-from typing import Any, Dict, List
+from typing import Any, Callable, Optional, Type, TypedDict
 from pathlib import Path
 
 import pandas as pd
 import numpy as np
+from sklearn.base import ClassifierMixin
 import toml
 
 from experiment_config.settings import SUPPORTED_CLASSIFIERS, SUPPORTED_FEATURE_PREPROCESSORS, SUPPORTED_METRICS
 
 
+class FeatureMap(TypedDict):
+    categorical: Optional[list[str]]
+    bool: Optional[list[str]]
+    ordinal: Optional[dict[str, list[str]]]
+
+
 class Experiment:
-    def __init__(self, experiment_config: Dict[str, Any], file_path: Path = None):
+    seed: int
+    prediction_data_file: Path
+
+    prediction_true_values: list[str]
+    prediction_false_values: list[str]
+
+    feature_map: FeatureMap
+    boolean_features: list[str]
+    ordinal_features: dict[str, list[str]]
+    categorical_features: list[str]
+    dtypes: dict[str, str]
+
+    prediction_data_columns: list[str]
+    target_column: str
+    split_column: str
+    holdout_split_condition: Any
+
+    prediction_data: pd.DataFrame
+    ordinal_encoded_cols: defaultdict[str, pd.Index]
+
+    X: pd.DataFrame
+    y: pd.Series
+    groups: pd.Series
+    holdout_x: pd.DataFrame
+    holdout_y: pd.Series
+
+    name: str
+    metric_results: dict
+    metric_results_labels: dict
+
+    metrics: dict[str, Callable[[np.Series, np.Series, bool, dict], float]]
+    feature_preprocessors: dict[str, Optional[Callable]]
+    classifiers: dict[str, Type[ClassifierMixin]]
+    file_path: Optional[Path]
+
+    def __init__(self, experiment_config: dict[str, Any], file_path: Path = None):
         self.seed = experiment_config['random_seed']
         np.random.seed(self.seed)
 
@@ -20,9 +62,9 @@ class Experiment:
         self.prediction_false_values = experiment_config['data']['false_values']
 
         self.feature_map = experiment_config['data']['features']
-        self.boolean_features: List[str] = self.feature_map.get('bool', [])
-        self.ordinal_features: Dict[str, List[str]] = self.feature_map.get('ordinal', {})
-        self.categorical_features: List[str] = self.feature_map.get('categorical', [])
+        self.boolean_features = self.feature_map.get('bool', [])
+        self.ordinal_features = self.feature_map.get('ordinal', {})
+        self.categorical_features = self.feature_map.get('categorical', [])
 
         # We exclude booleans because we set those after the NA values are removed
         self._categorical_columns = self.categorical_features + list(self.ordinal_features.keys())
@@ -132,7 +174,7 @@ class Experiment:
         return dataset.iloc[train_indices], dataset.iloc[test_indices]
 
 
-def parse_experiment_paths(experiment_input_paths: List[str]) -> List[Experiment]:
+def parse_experiment_paths(experiment_input_paths: list[str]) -> list[Experiment]:
     experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
     experiments = []
 
