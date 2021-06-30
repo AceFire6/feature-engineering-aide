@@ -1,8 +1,9 @@
+from collections import Sized
 import csv
 from datetime import datetime
 from pathlib import Path
 
-from typing import Dict, List, TextIO
+from typing import TextIO
 
 import numpy as np
 
@@ -16,20 +17,15 @@ def has_headings(data_source: str) -> bool:
     with data_source_path.open(newline='') as data_file:
         file_sample = data_file.read(1024)
 
-        return csv_sniffer.has_header(file_sample)
+    return csv_sniffer.has_header(file_sample)
 
 
-def is_not_empty(value) -> bool:
+def is_not_empty(value: Sized) -> bool:
     return len(value) > 0
 
 
-def get_entries_from_csv_row(headings_csv: str) -> List[str]:
-    return [part.strip() for part in headings_csv.split(',')]
-
-
-def set_selected_features(input_features: List[str], selected_features: List) -> List[str]:
-    selected_features.extend(input_features)
-    return input_features
+def get_entries_from_csv_row(headings_csv: str) -> list[str]:
+    return list(map(str.strip, headings_csv.split(',')))
 
 
 def get_random_seed(now: datetime) -> int:
@@ -39,7 +35,7 @@ def get_random_seed(now: datetime) -> int:
 
 
 def print_metric_results_five_number_summary(
-    result_metrics: Dict[str, List[float]],
+    result_metrics: dict[str, list[float]],
     results_file: TextIO,
 ) -> None:
     for metric, results in result_metrics.items():
