@@ -3,9 +3,11 @@ import csv
 from datetime import datetime
 from pathlib import Path
 
-from typing import TextIO
+from typing import Optional, TextIO
 
 import numpy as np
+
+from experiment_config.experiment import Experiment
 
 
 def has_headings(data_source: str) -> bool:
@@ -55,3 +57,24 @@ def print_metric_results_five_number_summary(
             end='\n',
             file=results_file,
         )
+
+
+def make_results_path(experiment: Experiment, start_time: Optional[str] = None) -> Path:
+    if start_time is None:
+        start_time = experiment.start_time
+
+    # Make results directory if it doesn't exist
+    results_file_path = experiment.file_path.parent / 'results' / experiment.name
+    results_file_path.mkdir(parents=True, exist_ok=True)
+
+    results_file_name = f'{experiment.name}_automl_results_{start_time}.txt'
+    results_file_path_with_name = results_file_path / results_file_name
+
+    return results_file_path_with_name
+
+
+def write_results(experiment: Experiment, *result_lines: str) -> None:
+    result_path = make_results_path(experiment)
+
+    with result_path.open('a') as result_file:
+        result_file.writelines(*result_lines)
