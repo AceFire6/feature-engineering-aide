@@ -4,9 +4,11 @@ from typing import List
 
 from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
+from autosklearn.pipeline.components import feature_preprocessing
 from sklearn.metrics import matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
 
+from experiment_config.automl_discretizer import KBinsDiscretizer
 from experiment_config.experiment import Experiment, parse_experiment_paths
 from experiment_config.settings import (
     MEMORY_LIMIT,
@@ -17,6 +19,9 @@ from experiment_config.settings import (
     TOTAL_MEMORY_LIMIT,
 )
 from experiment_config.utils import print_metric_results_five_number_summary
+
+
+feature_preprocessing.add_preprocessor(KBinsDiscretizer)
 
 
 def run_experiments(experiments):
@@ -72,7 +77,7 @@ def run_experiments(experiments):
             #     worst_possible_result=-1.0,
             # )
             classifier = AutoSklearnClassifier(
-                include_preprocessors=['no_preprocessing'],
+                include_preprocessors=['KBinsDiscretizer'],
                 time_left_for_this_task=TASK_TIME,
                 per_run_time_limit=TIME_PER_RUN,
                 n_jobs=N_JOBS,
