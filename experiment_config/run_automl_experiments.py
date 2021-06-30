@@ -1,6 +1,5 @@
 from datetime import datetime
 import sys
-from typing import List
 
 from autosklearn.classification import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
@@ -24,7 +23,7 @@ from experiment_config.utils import print_metric_results_five_number_summary
 feature_preprocessing.add_preprocessor(KBinsDiscretizer)
 
 
-def run_experiments(experiments):
+def run_experiments(experiments: list[Experiment]) -> None:
     total_experiments = len(experiments)
     print(
         f'Running {total_experiments} experiment(s)!',
@@ -144,6 +143,6 @@ if __name__ == '__main__':
     if not experiment_input_paths:
         print('Please pass in experiment files as arguments to this script')
 
-    experiment_list: List[Experiment] = parse_experiment_paths(experiment_input_paths)
+    experiment_list = parse_experiment_paths(experiment_input_paths)
     run_experiments(experiment_list)
     print('Experiments finished!')
