@@ -1,7 +1,8 @@
 from collections import defaultdict
-from typing import Any, Callable, Optional, Type, TypedDict
+from typing import Any, Callable, Optional, Protocol, Type, TypedDict
 from pathlib import Path
 
+from numpy.typing import ArrayLike
 import pandas as pd
 import numpy as np
 from sklearn.base import ClassifierMixin
@@ -14,6 +15,10 @@ class FeatureMap(TypedDict):
     categorical: Optional[list[str]]
     bool: Optional[list[str]]
     ordinal: Optional[dict[str, list[str]]]
+
+
+class ScorerProtocol(Protocol):
+    def __call__(self, y_true: ArrayLike, y_pred: ArrayLike, sample_weight: Optional[ArrayLike] = None) -> float: ...
 
 
 class Experiment:
@@ -47,7 +52,7 @@ class Experiment:
     metric_results: dict
     metric_results_labels: dict
 
-    metrics: dict[str, Callable[[np.Series, np.Series, bool, dict], float]]
+    metrics: dict[str, ScorerProtocol]
     feature_preprocessors: dict[str, Optional[Callable]]
     classifiers: dict[str, Type[ClassifierMixin]]
     file_path: Optional[Path]
