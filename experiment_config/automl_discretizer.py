@@ -1,26 +1,25 @@
-from typing import Optional, TypeVar
+from typing import Optional
 
 from autosklearn.pipeline.components.base import AutoSklearnPreprocessingAlgorithm
 from autosklearn.pipeline.constants import DENSE, INPUT, SIGNED_DATA, SPARSE, UNSIGNED_DATA
 from ConfigSpace import CategoricalHyperparameter, ConfigurationSpace, UniformIntegerHyperparameter
+from numpy.typing import ArrayLike
 from sklearn import preprocessing
-
-NpArrayLike = TypeVar('NpArrayLike')
 
 
 class KBinsDiscretizer(AutoSklearnPreprocessingAlgorithm):
-    def __init__(self, n_bins=5, encode='onehot', strategy='quantile', random_state=None):
+    def __init__(self, n_bins: int = 5, encode: str = 'onehot', strategy: str = 'quantile', random_state=None):
         self.n_bins = n_bins
         self.encode = encode
         self.strategy = strategy
         self.random_state = random_state
         self.preprocessor = preprocessing.KBinsDiscretizer(n_bins, encode=encode, strategy=strategy)
 
-    def fit(self, X: NpArrayLike, y: NpArrayLike) -> 'KBinsDiscretizer':
+    def fit(self, X: ArrayLike, y: ArrayLike) -> 'KBinsDiscretizer':
         self.preprocessor.fit(X, y)
         return self
 
-    def transform(self, X: NpArrayLike) -> NpArrayLike:
+    def transform(self, X: ArrayLike) -> ArrayLike:
         if self.preprocessor is None:
             raise NotImplementedError()
 
