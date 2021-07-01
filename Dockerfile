@@ -27,6 +27,7 @@ COPY experiment_config experiment_config/
 ENV PYTHONPATH /feature_engineering_aide/
 
 ARG TZ=Africa/Johannesburg
+ENV TZ=$TZ
 
 RUN echo $TZ > /etc/timezone
 ENV PYTHONUNBUFFERED 1
