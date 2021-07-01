@@ -24,8 +24,7 @@ def run_experiment(experiment_counter: str, experiment: Experiment) -> None:
             f'{preprocessor_counter} - experiment {experiment.name} - {preprocessor_start:%Y-%m-%d_%H:%M:%S}',
         )
         classifier = AutoSklearnClassifier(
-            include_estimators=['DecisionTree', 'RandomForest', 'GaussianNB'],
-            include_preprocessors=['KBinsDiscretizer'],
+            include_estimators=['decision_tree', 'random_forest', 'gaussian_nb'],
             time_left_for_this_task=TASK_TIME,
             per_run_time_limit=TIME_PER_RUN,
             n_jobs=N_JOBS,
