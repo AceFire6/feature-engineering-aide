@@ -85,6 +85,7 @@ def run_experiment(experiment_counter: str, experiment: Experiment) -> None:
             f'\tfeatures_used = {features_selected}\n',
             f'\tholdout_mcc_result = {holdout_mcc_result}\n',
             f'\t{classifier.sprint_statistics()}\n\n',
+            f'\t{classifier.show_models()}\n\n',
             *results_io.readlines(),
         )
 
