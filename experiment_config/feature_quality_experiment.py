@@ -107,12 +107,13 @@ def run_experiments(experiments: list[Experiment]) -> None:
         start_time = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
         experiment.start_time = start_time
         experiment_counter = f'[{index + 1}/{total_experiments}]'
-        print(f'{experiment_counter} Starting experiment {experiment.name} at {start_time}')
+        print(f'{experiment_counter} Starting experiment {experiment.name} {experiment.seed=} at {start_time}')
 
         write_results(
             experiment,
             'Config:\n',
             f'\tn = {experiment.training_set_sample_size()}\n',
+            f'\tseed = {experiment.seed}\n',
             f'\tn_jobs = {N_JOBS}\n',
             f'\ttotal_time = {TASK_TIME}\n',
             f'\ttime_per_run = {TIME_PER_RUN}\n',
