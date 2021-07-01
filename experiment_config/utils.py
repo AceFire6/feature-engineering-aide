@@ -77,4 +77,4 @@ def write_results(experiment: Experiment, *result_lines: str) -> None:
     result_path = make_results_path(experiment)
 
     with result_path.open('a') as result_file:
-        result_file.writelines(*result_lines)
+        result_file.writelines(result_lines)
