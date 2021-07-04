@@ -11,6 +11,7 @@ basicConfig(format=LOG_FORMAT, level=LOG_LEVEL, handlers=default_handlers)
 
 def setup_logger(
     name: str,
+    console_log_level: int = LOG_LEVEL,
     log_to_file: bool = LOG_TO_FILE,
     log_formatter: Optional[Formatter] = LOG_FORMATTER,
     file_handler: Optional[FileHandler] = None,
@@ -18,6 +19,7 @@ def setup_logger(
     logger = getLogger(name)
 
     stream_handler = StreamHandler()
+    stream_handler.setLevel(console_log_level)
     stream_handler.setFormatter(log_formatter)
     logger.addHandler(stream_handler)
 
