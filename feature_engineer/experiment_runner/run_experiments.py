@@ -4,8 +4,9 @@ import sys
 from sklearn.model_selection import LeaveOneGroupOut
 from tqdm import tqdm
 
-from experiment_config.experiment import parse_experiment_paths
-from experiment_config.utils import print_metric_results_five_number_summary
+from feature_engineer.experiment_config.experiment import parse_experiment_paths
+
+from .utils import print_metric_results_five_number_summary
 
 
 def run_experiments(experiments):

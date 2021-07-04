@@ -8,7 +8,11 @@ import numpy as np
 from sklearn.base import ClassifierMixin
 import toml
 
-from feature_engineer.experiment_runner.settings import SUPPORTED_CLASSIFIERS, SUPPORTED_FEATURE_PREPROCESSORS, SUPPORTED_METRICS
+from feature_engineer.experiment_runner.settings import (
+    SUPPORTED_CLASSIFIERS,
+    SUPPORTED_FEATURE_PREPROCESSORS,
+    SUPPORTED_METRICS,
+)
 
 
 class FeatureMap(TypedDict):
