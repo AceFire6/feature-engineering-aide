@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Any, Callable, Iterable, Optional, Protocol, Type, TypedDict
+from typing import Any, Callable, Iterable, Optional, Protocol, Type, TypedDict, Union
 from pathlib import Path
 
 from numpy.typing import ArrayLike
@@ -168,7 +168,7 @@ class Experiment:
         }
         self.file_path = file_path
 
-    def training_set_sample_size(self):
+    def training_set_sample_size(self) -> int:
         return self.prediction_data[self.target_column].size
 
     def add_result(self, metric: str, result: float, label: str = None) -> None:
@@ -180,7 +180,11 @@ class Experiment:
         self.metric_results_labels[metric].append(label)
 
     @staticmethod
-    def get_split(dataset, train_indices, test_indices):
+    def get_split(
+        dataset: Union[pd.DataFrame, pd.Series],
+        train_indices: pd.Series,
+        test_indices: pd.Series,
+    ) -> tuple[pd.DataFrame, pd.DataFrame]:
         return dataset.iloc[train_indices], dataset.iloc[test_indices]
 
 
