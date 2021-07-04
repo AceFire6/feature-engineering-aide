@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Any, Callable, Optional, Protocol, Type, TypedDict
+from typing import Any, Callable, Iterable, Optional, Protocol, Type, TypedDict
 from pathlib import Path
 
 from numpy.typing import ArrayLike
@@ -184,7 +184,7 @@ class Experiment:
         return dataset.iloc[train_indices], dataset.iloc[test_indices]
 
 
-def parse_experiment_paths(experiment_input_paths: list[str]) -> list[Experiment]:
+def parse_experiment_paths(experiment_input_paths: Iterable[str]) -> list[Experiment]:
     experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
     experiments = []
 
