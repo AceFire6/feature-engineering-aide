@@ -8,7 +8,7 @@ from sklearn.metrics import matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
 
 from automl_addons.automl_discretizer import KBinsDiscretizer
-from feature_engineer.experiment_runner.experiment import Experiment, parse_experiment_paths
+from experiment_config.experiment import Experiment, parse_experiment_paths
 from feature_engineer.experiment_runner.settings import (
     MEMORY_LIMIT,
     N_JOBS,
