@@ -1,0 +1,28 @@
+from logging import basicConfig, FileHandler, Formatter, getLogger, Logger, NullHandler, StreamHandler
+
+from typing import Optional
+
+from .settings import LOG_FORMAT, LOG_FORMATTER, LOG_LEVEL, LOG_TO_FILE
+
+
+default_handlers = [NullHandler()]
+basicConfig(format=LOG_FORMAT, level=LOG_LEVEL, handlers=default_handlers)
+
+
+def setup_logger(
+    name: str,
+    log_to_file: bool = LOG_TO_FILE,
+    log_formatter: Optional[Formatter] = LOG_FORMATTER,
+    file_handler: Optional[FileHandler] = None,
+) -> Logger:
+    logger = getLogger(name)
+
+    stream_handler = StreamHandler()
+    stream_handler.setFormatter(log_formatter)
+    logger.addHandler(stream_handler)
+
+    if log_to_file:
+        file_handler.setFormatter(log_formatter)
+        logger.addHandler(file_handler)
+
+    return logger
