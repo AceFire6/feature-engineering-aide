@@ -4,7 +4,7 @@ import sys
 
 from autosklearn.estimators import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
-from sklearn.metrics import matthews_corrcoef
+from sklearn.metrics import accuracy_score, classification_report, f1_score, matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
 
 from experiment_config.experiment import Experiment, parse_experiment_paths
@@ -73,6 +73,9 @@ def run_experiment(experiment_counter: str, experiment: Experiment) -> None:
         classifier.refit(training_data, targets)
         holdout_prediction = classifier.predict(experiment.holdout_x[features_selected])
         holdout_mcc_result = matthews_corrcoef(experiment.holdout_y, holdout_prediction)
+        holdout_f1_result = f1_score(experiment.holdout_y, holdout_prediction)
+        holdout_balanced_accuracy_result = accuracy_score(experiment.holdout_y, holdout_prediction)
+        classification_text_report = classification_report(experiment.holdout_y, holdout_prediction)
 
         with StringIO() as results_io:
             print_metric_results_five_number_summary(experiment.metric_results, results_io)
@@ -85,6 +88,9 @@ def run_experiment(experiment_counter: str, experiment: Experiment) -> None:
             f'\ttime_taken = {classifier_time_taken}\n',
             f'\tfeatures_used = {features_selected}\n',
             f'\tholdout_mcc_result = {holdout_mcc_result}\n',
+            f'\tholdout_f1_result = {holdout_f1_result}\n',
+            f'\tholdout_balanced_accuracy_result = {holdout_balanced_accuracy_result}\n',
+            f'\tclassification_text_report = {classification_text_report}\n',
             f'\t{classifier.sprint_statistics()}\n\n',
             f'\t{classifier.show_models()}\n\n',
             metric_results_output,
