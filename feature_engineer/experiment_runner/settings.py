@@ -32,6 +32,7 @@ if TOTAL_MEMORY_LIMIT is not None:
     MEMORY_LIMIT = TOTAL_MEMORY_LIMIT // N_JOBS
 
 
+DATE_FORMAT = '%Y_%m_%dT%H_%M_%S'
 LOG_FORMAT = '{name} - {created} - {levelname} - [{funcName}] {message} - {pathname}:{lineno}'
 LOG_FORMATTER = logging.Formatter(LOG_FORMAT, style='{')
 
