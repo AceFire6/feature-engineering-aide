@@ -2,8 +2,7 @@ from collections import Sized
 import csv
 from datetime import datetime
 from pathlib import Path
-
-from typing import Optional, TextIO
+from typing import TextIO
 
 import numpy as np
 
@@ -59,9 +58,8 @@ def print_metric_results_five_number_summary(
         )
 
 
-def make_results_path(experiment: Experiment, start_time: Optional[str] = None) -> Path:
-    if start_time is None:
-        start_time = experiment.start_time
+def make_results_path(experiment: Experiment) -> Path:
+    start_time = experiment.start_time
 
     # Make results directory if it doesn't exist
     results_file_path = experiment.file_path.parent / 'results' / experiment.name

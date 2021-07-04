@@ -60,9 +60,9 @@ class Experiment:
     metrics: dict[str, ScorerProtocol]
     feature_preprocessors: dict[str, Optional[Callable]]
     classifiers: dict[str, Type[ClassifierMixin]]
-    file_path: Optional[Path]
+    file_path: Path
 
-    def __init__(self, experiment_config: dict[str, Any], file_path: Path = None):
+    def __init__(self, experiment_config: dict[str, Any], file_path: Path):
         self.seed = experiment_config['random_seed']
         np.random.seed(self.seed)
 
