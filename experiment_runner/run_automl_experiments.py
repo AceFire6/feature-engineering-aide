@@ -7,9 +7,9 @@ from autosklearn.pipeline.components import feature_preprocessing
 from sklearn.metrics import matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
 
-from experiment_config.automl_discretizer import KBinsDiscretizer
-from experiment_config.experiment import Experiment, parse_experiment_paths
-from experiment_config.settings import (
+from experiment_runner.automl_discretizer import KBinsDiscretizer
+from experiment_runner.experiment import Experiment, parse_experiment_paths
+from experiment_runner.settings import (
     MEMORY_LIMIT,
     N_JOBS,
     SUPPORTED_METRICS,
@@ -17,7 +17,7 @@ from experiment_config.settings import (
     TIME_PER_RUN,
     TOTAL_MEMORY_LIMIT,
 )
-from experiment_config.utils import print_metric_results_five_number_summary
+from experiment_runner.utils import print_metric_results_five_number_summary
 
 
 feature_preprocessing.add_preprocessor(KBinsDiscretizer)

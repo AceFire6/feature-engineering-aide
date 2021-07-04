@@ -22,7 +22,7 @@ RUN pip install auto-sklearn==0.12.6
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY experiment_config experiment_config/
+COPY experiment_runner experiment_runner/
 
 ENV PYTHONPATH /feature_engineering_aide/
 
