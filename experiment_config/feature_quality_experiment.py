@@ -74,19 +74,20 @@ def run_experiment(experiment_counter: str, experiment: Experiment) -> None:
         holdout_prediction = classifier.predict(experiment.holdout_x[features_selected])
         holdout_mcc_result = matthews_corrcoef(experiment.holdout_y, holdout_prediction)
 
-        results_io = StringIO()
-        print_metric_results_five_number_summary(experiment.metric_results, results_io)
+        with StringIO() as results_io:
+            print_metric_results_five_number_summary(experiment.metric_results, results_io)
+            metric_results_output = results_io.getvalue()
 
-        preprocessor_time_taken = datetime.now() - preprocessor_start
+        classifier_time_taken = datetime.now() - preprocessor_start
         write_results(
             experiment,
             f'{preprocessor_name}\n',
-            f'\ttime_taken = {preprocessor_time_taken}\n',
+            f'\ttime_taken = {classifier_time_taken}\n',
             f'\tfeatures_used = {features_selected}\n',
             f'\tholdout_mcc_result = {holdout_mcc_result}\n',
             f'\t{classifier.sprint_statistics()}\n\n',
             f'\t{classifier.show_models()}\n\n',
-            *results_io.readlines(),
+            metric_results_output,
         )
 
 
