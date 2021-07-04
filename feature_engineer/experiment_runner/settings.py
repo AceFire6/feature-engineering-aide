@@ -1,4 +1,5 @@
 from functools import partial
+import logging
 
 from environs import Env
 from sklearn.ensemble import RandomForestClassifier
@@ -17,6 +18,9 @@ except ImportError:
 env = Env()
 
 with env.prefixed('FEA_'):
+    LOG_LEVEL = env.log_level('LOG_LEVEL', default=logging.DEBUG)
+    LOG_TO_FILE = env.bool('LOG_TO_FILE', default=True)
+
     N_JOBS = env.int('N_JOBS', default=4)
     TOTAL_MEMORY_LIMIT = env.int('TOTAL_MEMORY_LIMIT', default=None)
     TASK_TIME = env.int('TASK_TIME', default=180)
