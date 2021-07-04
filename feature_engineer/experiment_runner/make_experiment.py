@@ -6,14 +6,14 @@ import pandas as pd
 import toml
 from InquirerPy import inquirer
 
-from experiment_runner.settings import (
+from feature_engineer.experiment_runner.settings import (
     DATA_TYPE_CHOICES,
     SUPPORTED_CLASSIFIERS,
     SUPPORTED_FEATURE_PREPROCESSORS,
     SUPPORTED_METRICS,
     ORDINAL,
 )
-from experiment_runner.utils import (
+from feature_engineer.experiment_runner.utils import (
     get_entries_from_csv_row,
     has_headings,
     is_not_empty,

@@ -7,7 +7,7 @@ from typing import Optional, TextIO
 
 import numpy as np
 
-from experiment_runner.experiment import Experiment
+from feature_engineer.experiment_runner.experiment import Experiment
 
 
 def has_headings(data_source: str) -> bool:
