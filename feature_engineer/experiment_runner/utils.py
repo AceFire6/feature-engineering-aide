@@ -2,11 +2,17 @@ from collections import Sized
 import csv
 from datetime import datetime
 from pathlib import Path
-from typing import TextIO
+from typing import Callable, Optional, TextIO, TypeVar
 
+import functools
 import numpy as np
 
 from feature_engineer.experiment_config.experiment import Experiment
+
+
+DecoratedFunctionResult = TypeVar('DecoratedFunctionResult')
+DecoratedFunction = Callable[..., DecoratedFunctionResult]
+Decorator = Callable[[DecoratedFunction], Callable[..., DecoratedFunctionResult]]
 
 
 def has_headings(data_source: str) -> bool:
@@ -76,3 +82,20 @@ def write_results(experiment: Experiment, *result_lines: str) -> None:
 
     with result_path.open('a') as result_file:
         result_file.writelines(result_lines)
+
+
+def hook_function(pre_hook: Optional[Callable] = None, post_hook: Optional[Callable] = None) -> Decorator:
+    def decorator(func: DecoratedFunction) -> Callable[..., DecoratedFunctionResult]:
+        @functools.wraps
+        def _func_wrapper(*args, **kwargs) -> DecoratedFunctionResult:
+            if pre_hook is not None:
+                pre_hook()
+
+            result = func(*args, **kwargs)
+
+            if post_hook is not None:
+                post_hook()
+
+            return result
+        return _func_wrapper
+    return decorator

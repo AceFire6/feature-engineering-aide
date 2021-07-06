@@ -10,6 +10,7 @@ from feature_engineer.experiment_config.experiment import Experiment, parse_expe
 
 from .runner_logging import setup_logger
 from .settings import DATE_FORMAT
+from .utils import hook_function
 
 
 class ExperimentResult(TypedDict):
@@ -47,6 +48,22 @@ class ExperimentRunner:
         self.runner_logging_path = runner_logging_path
 
         self._experiment_loggers: dict[Experiment, Logger] = {}
+
+    def __init_subclass__(cls, **kwargs):
+        # Set up before all experiments hooks
+        before_all_experiments_hook = cls.__dict__.get(ExperimentRunner._before_run_all_experiments.__name__)
+        after_all_experiments_hook = cls.__dict__.get(ExperimentRunner._after_run_all_experiments.__name__)
+        all_experiments_hook_decorator = hook_function(
+            pre_hook=before_all_experiments_hook,
+            post_hook=after_all_experiments_hook,
+        )
+        cls.run_experiments = all_experiments_hook_decorator(cls.run_experiments)
+
+        # Set up before single experiment hooks
+        before_experiment_hook = cls.__dict__.get(ExperimentRunner._before_run_experiment.__name__)
+        after_experiment_hook = cls.__dict__.get(ExperimentRunner._after_run_experiment.__name__)
+        experiment_hook = hook_function(pre_hook=before_experiment_hook, post_hook=after_experiment_hook)
+        cls.run_experiment = experiment_hook(cls.run_experiment)
 
     @property
     def logger(self) -> Logger:
