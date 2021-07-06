@@ -133,3 +133,16 @@ class ExperimentRunner:
             self.write_experiment_results(experiment, experiment_result)
 
         return experiment_results
+
+    # Runner hooks - override these to add additional functionality
+    def _before_run_all_experiments(self):
+        self.logger.debug('Running _before_run_all_experiments')
+
+    def _after_run_all_experiments(self):
+        self.logger.debug('Running _after_run_all_experiments')
+
+    def _before_run_experiment(self):
+        self.logger.debug('Running _before_run_experiment')
+
+    def _after_run_experiment(self):
+        self.logger.debug('Running _after_run_experiment')
