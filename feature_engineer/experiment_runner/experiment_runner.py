@@ -29,8 +29,10 @@ class ExperimentResult(TypedDict):
 class ExperimentRunner:
     name: str = None
     experiments: list[Experiment]
+
     runner_logging_path: Optional[Path] = None
     console_log_level: ClassVar[int] = logging.INFO
+    experiment_log_format: ClassVar[Optional[str]] = None
 
     def __init__(self, *experiment_paths: str, runner_logging_path: Optional[Path] = None):
         self.run_start = datetime.now()
@@ -62,10 +64,11 @@ class ExperimentRunner:
         return self.logger
 
     def setup_experiment_logger(self, experiment: Experiment) -> Logger:
-        log_format = (
+        default_log_format = (
             f'{{name}} - {{created}} - {{levelname}} - {experiment.name} - '
             '[{funcName}] {message} - {pathname}:{lineno}'
         )
+        log_format = self.experiment_log_format or default_log_format
         log_formatter = Formatter(log_format, style='{')
 
         results_path = self.get_results_path(experiment)
