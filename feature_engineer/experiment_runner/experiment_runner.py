@@ -33,6 +33,7 @@ class ExperimentRunner:
     runner_logging_path: Optional[Path] = None
     console_log_level: ClassVar[int] = logging.INFO
     experiment_log_format: ClassVar[Optional[str]] = None
+    log_to_file: ClassVar[bool] = True
 
     def __init__(self, *experiment_paths: str, runner_logging_path: Optional[Path] = None):
         self.run_start = datetime.now()
@@ -71,10 +72,13 @@ class ExperimentRunner:
         log_format = self.experiment_log_format or default_log_format
         log_formatter = Formatter(log_format, style='{')
 
-        results_path = self.get_results_path(experiment)
-        file_handler = FileHandler(results_path / f'run_log_{experiment.start_time}.log')
+        logger_kwargs = {'log_formatter': log_formatter}
+        if self.log_to_file:
+            results_path = self.get_results_path(experiment)
+            file_handler = FileHandler(results_path / f'run_log_{experiment.start_time}.log')
+            logger_kwargs['file_handler'] = file_handler
 
-        logger = setup_logger(experiment.name, log_formatter=log_formatter, file_handler=file_handler)
+        logger = setup_logger(experiment.name, **logger_kwargs)
 
         return logger
 

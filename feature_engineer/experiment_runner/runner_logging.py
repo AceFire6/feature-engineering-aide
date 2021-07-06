@@ -23,7 +23,7 @@ def setup_logger(
     stream_handler.setFormatter(log_formatter)
     logger.addHandler(stream_handler)
 
-    if log_to_file:
+    if log_to_file and file_handler is not None:
         file_handler.setFormatter(log_formatter)
         logger.addHandler(file_handler)
 
