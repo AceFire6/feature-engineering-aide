@@ -61,6 +61,21 @@ class ExperimentRunner:
 
         return self.logger
 
+    def setup_experiment_logger(self, experiment: Experiment) -> Logger:
+        log_format = (
+            '{name} - {created} - {levelname} - '
+            f'{experiment.name}'
+            ' - [{funcName}] {message} - {pathname}:{lineno}'
+        )
+        log_formatter = Formatter(log_format, style='{')
+
+        results_path = self.get_results_path(experiment)
+        file_handler = FileHandler(results_path / f'run_log_{experiment.start_time}.log')
+
+        logger = setup_logger(experiment.name, log_formatter=log_formatter, file_handler=file_handler)
+
+        return logger
+
     def get_experiment_logger(self, experiment: Experiment) -> Logger:
         if experiment not in self._experiment_loggers:
             experiment_logger = self.setup_experiment_logger(experiment)
@@ -86,32 +101,17 @@ class ExperimentRunner:
 
         return results_path / results_file
 
-    def setup_experiment_logger(self, experiment: Experiment) -> Logger:
-        log_format = (
-            '{name} - {created} - {levelname} - ' 
-            f'{experiment.name}'
-            ' - [{funcName}] {message} - {pathname}:{lineno}'
-        )
-        log_formatter = Formatter(log_format, style='{')
-
-        results_path = self.get_results_path(experiment)
-        file_handler = FileHandler(results_path / f'run_log_{experiment.start_time}.log')
-
-        logger = setup_logger(experiment.name, log_formatter=log_formatter, file_handler=file_handler)
-
-        return logger
-
-    def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentResult:
-        raise NotImplementedError(
-            'Missing run_experiment - this should be overridden to define how the experiment is run',
-        )
-
     def write_experiment_results(self, experiment: Experiment, experiment_result: ExperimentResult) -> None:
         self.logger.info(f'Writing results for {experiment.name} to file - {experiment_result}')
         experiment_results_file_path = self.get_experiment_results_file(experiment)
 
         with experiment_results_file_path.open('wb') as results_file:
             results_file.write(orjson.dumps(experiment_result))
+
+    def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentResult:
+        raise NotImplementedError(
+            'Missing run_experiment - this should be overridden to define how the experiment is run',
+        )
 
     def run_experiments(self) -> dict[Experiment, ExperimentResult]:
         experiment_names = ', '.join(experiment.name for experiment in self.experiments)
