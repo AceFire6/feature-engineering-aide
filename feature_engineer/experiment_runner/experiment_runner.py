@@ -63,9 +63,8 @@ class ExperimentRunner:
 
     def setup_experiment_logger(self, experiment: Experiment) -> Logger:
         log_format = (
-            '{name} - {created} - {levelname} - '
-            f'{experiment.name}'
-            ' - [{funcName}] {message} - {pathname}:{lineno}'
+            f'{{name}} - {{created}} - {{levelname}} - {experiment.name} - '
+            '[{funcName}] {message} - {pathname}:{lineno}'
         )
         log_formatter = Formatter(log_format, style='{')
 
