@@ -22,7 +22,8 @@ class FeatureMap(TypedDict):
 
 
 class ScorerProtocol(Protocol):
-    def __call__(self, y_true: ArrayLike, y_pred: ArrayLike, sample_weight: Optional[ArrayLike] = None) -> float: ...
+    def __call__(self, y_true: ArrayLike, y_pred: ArrayLike, sample_weight: Optional[ArrayLike] = None) -> float:
+        ...
 
 
 class Experiment:

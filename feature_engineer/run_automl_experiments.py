@@ -93,7 +93,7 @@ def run_experiments(experiments: list[Experiment]) -> None:
             if preprocessor_class is not None:
                 preprocessor = preprocessor_class().fit(experiment.X, experiment.y)
                 features_selected_mask = preprocessor.get_support()
-                features_selected = [column for column in experiment.X.columns[features_selected_mask]]
+                features_selected = list(experiment.X.columns[features_selected_mask])
 
             training_data = experiment.X[features_selected].copy()
             targets = experiment.y.copy()
