@@ -1,0 +1,12 @@
+-c requirements.in
+
+flake8
+flake8-broken-line
+flake8-commas
+flake8-comprehensions
+flake8-import-order
+flake8-print
+flake8-quotes
+flake8-simplify
+pandas-vet
+pep8-naming
