@@ -160,6 +160,13 @@ class ExperimentRunner:
             run_counter = f'{run_number} / {self.run_experiments_n_times}'
             self.logger.info(f'Running {experiment=} - run number {run_counter}')
 
+            # Set the seed for the current run
+            seed_to_set = None
+            if self.seeds_for_experiment_runs:
+                seed_to_set = self.seeds_for_experiment_runs[run_index]
+
+            experiment.reset_seed(seed_to_set)
+
             experiment_result = self.experiment(experiment, logger)
 
             self.logger.info(f'Experiment {experiment.name} [{run_counter}] finished! - Results: {experiment_result}')
