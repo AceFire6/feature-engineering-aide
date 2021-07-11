@@ -6,7 +6,7 @@ from typing import Any, ClassVar, Optional, TypedDict
 
 import orjson
 
-from feature_engineer.experiment_config.experiment import Experiment, parse_experiment_paths
+from feature_engineer.experiment_config.experiment import Experiment
 
 from .runner_logging import setup_logger
 from .settings import DATE_FORMAT
@@ -47,7 +47,8 @@ class ExperimentRunner:
         self.name = self.name or self.__name__
 
         self._experiment_paths = experiment_paths
-        self.experiments = parse_experiment_paths(experiment_paths)
+        self._additional_experiment_config = {'use_random_seeds': use_random_seeds}
+        self.experiments = Experiment.from_files(*experiment_paths, global_config=self._additional_experiment_config)
 
         # This will be set on the first access of self.logger
         self._logger = None
