@@ -67,10 +67,8 @@ class Experiment:
 
     def __init__(self, experiment_config: dict[str, Any], file_path: Path, use_random_seed: bool = False):
         self.use_random_seed = use_random_seed
-
-        random_number = int(datetime.now().timestamp() * 1e6)
-        self.seed = random_number if use_random_seed else experiment_config['random_seed']
-        np.random.seed(self.seed)
+        self.experiment_config_seed = experiment_config['random_seed']
+        self.reset_seed()
 
         self.prediction_data_file = Path(experiment_config['data_source'])
 
@@ -200,6 +198,14 @@ class Experiment:
             experiments.append(experiment)
 
         return experiments
+
+    def reset_seed(self) -> None:
+        seed_to_use = self.experiment_config_seed
+        if self.use_random_seed:
+            seed_to_use = int(datetime.now().timestamp() * 1e6)
+
+        self.seed = seed_to_use
+        np.random.seed(seed_to_use)
 
     def training_set_sample_size(self) -> int:
         return self.prediction_data[self.target_column].size
