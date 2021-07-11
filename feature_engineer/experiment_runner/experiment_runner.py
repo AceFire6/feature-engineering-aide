@@ -136,9 +136,7 @@ class ExperimentRunner:
             results_file.write(orjson.dumps(experiment_result))
 
     def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentResult:
-        raise NotImplementedError(
-            'Missing run_experiment - this should be overridden to define how the experiment is run',
-        )
+        return self.run_experiment(experiment, logger)
 
     def run_experiments(self) -> dict[Experiment, ExperimentResult]:
         experiment_names = ', '.join(experiment.name for experiment in self.experiments)
@@ -156,6 +154,11 @@ class ExperimentRunner:
         return experiment_results
 
     # Runner hooks - override these to add additional functionality
+    def experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentResult:
+        raise NotImplementedError(
+            'Missing experiment function - this should be overridden to define how the experiment is run',
+        )
+
     def _before_run_all_experiments(self) -> None:
         self.logger.debug('Running _before_run_all_experiments')
 
