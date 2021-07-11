@@ -99,3 +99,22 @@ def hook_function(pre_hook: Optional[Callable] = None, post_hook: Optional[Calla
             return result
         return _func_wrapper
     return decorator
+
+
+def get_metric_results_five_number_summary(result_metrics: dict[str, list[float]]) -> dict[str, dict[str, float]]:
+    metric_results = {}
+
+    for metric, results in result_metrics.items():
+        min_result = min(results)
+        max_result = max(results)
+        q1, median, q3 = np.percentile(results, [25, 50, 75])
+
+        metric_results[metric] = {
+            'min': min_result,
+            'q1': q1,
+            'median': median,
+            'q3': q3,
+            'max': max_result,
+        }
+
+    return metric_results
