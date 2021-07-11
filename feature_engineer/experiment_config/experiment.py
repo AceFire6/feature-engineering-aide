@@ -192,7 +192,12 @@ class Experiment:
         return cls(experiment_config, file_path=file_path, **additional_config)
 
     @classmethod
-    def from_files(cls, *file_paths: str, global_config: dict[str, Any], **file_path_config_map) -> list['Experiment']:
+    def from_files(
+        cls,
+        *file_paths: str,
+        global_config: Optional[dict[str, Any]] = None,
+        **file_path_config_map,
+    ) -> list['Experiment']:
         all_files = chain(file_paths, file_path_config_map.keys())
 
         experiments = []
