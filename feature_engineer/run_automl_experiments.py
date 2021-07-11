@@ -16,7 +16,7 @@ from feature_engineer.experiment_runner.utils import get_metric_results_five_num
 
 
 class ExperimentName(ExperimentRunner):
-    def experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> LabelledResults:
+    def experiment(self, experiment: Experiment, logger: Logger) -> LabelledResults:
         labelled_results = {}
         metrics_as_scorers = [make_scorer(name, score_func) for name, score_func in experiment.metrics.items()]
 
@@ -24,7 +24,7 @@ class ExperimentName(ExperimentRunner):
         for p_index, (preprocessor_name, preprocessor_class) in enumerate(experiment.feature_preprocessors.items()):
             preprocessor_start = datetime.now()
             preprocessor_counter = f'[{p_index + 1}/{preprocessor_count}]'
-            print(
+            logger.info(
                 f'Running preprocessor {preprocessor_name} '
                 f'{preprocessor_counter} - experiment {experiment.name} - {preprocessor_start:%Y-%m-%d_%H:%M:%S}',
             )
