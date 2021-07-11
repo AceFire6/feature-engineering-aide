@@ -1,6 +1,7 @@
 from collections import defaultdict
 from datetime import datetime
-from typing import Any, Callable, Iterable, Optional, Protocol, Type, TypedDict, Union
+from itertools import chain
+from typing import Any, Callable, Optional, Protocol, Type, TypedDict, Union
 from pathlib import Path
 
 from numpy.typing import ArrayLike
@@ -173,6 +174,31 @@ class Experiment:
         }
         self.file_path = file_path
 
+    @classmethod
+    def from_file(cls, file_path: Union[Path, str], **additional_config) -> 'Experiment':
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
+
+        if file_path.is_dir():
+            raise ValueError(f'Cannot handle {file_path.absolute()} as it is a directory!')
+
+        experiment_config = toml.load(file_path)
+
+        return cls(experiment_config, file_path=file_path, **additional_config)
+
+    @classmethod
+    def from_files(cls, *file_paths: str, **file_paths_with_config) -> list['Experiment']:
+        all_files = chain(file_paths, file_paths_with_config.keys())
+
+        experiments = []
+        for experiment_file_path in all_files:
+            additional_config = file_paths_with_config.get(experiment_file_path, {})
+
+            experiment = cls.from_file(experiment_file_path, **additional_config)
+            experiments.append(experiment)
+
+        return experiments
+
     def training_set_sample_size(self) -> int:
         return self.prediction_data[self.target_column].size
 
@@ -191,19 +217,3 @@ class Experiment:
         test_indices: pd.Series,
     ) -> tuple[pd.DataFrame, pd.DataFrame]:
         return dataset.iloc[train_indices], dataset.iloc[test_indices]
-
-
-def parse_experiment_paths(experiment_input_paths: Iterable[str]) -> list[Experiment]:
-    experiment_file_paths = [Path(experiment_file) for experiment_file in experiment_input_paths]
-    experiments = []
-
-    for experiment_file_path in experiment_file_paths:
-        if experiment_file_path.is_dir():
-            print(f'Cannot handle {experiment_file_path.absolute()} as it is a directory!')
-            continue
-
-        experiment_config = toml.load(experiment_file_path)
-        experiment = Experiment(experiment_config, file_path=experiment_file_path)
-        experiments.append(experiment)
-
-    return experiments
