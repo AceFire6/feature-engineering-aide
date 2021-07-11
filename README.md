@@ -31,3 +31,16 @@ or if these don't work (on MacOS for example). [Install Docker](https://docs.doc
 ```shell
 $ docker build -t feature-engineering-aide:latest .
 ```
+
+#### Installation Tips Mac
+
+##### M1 Mac
+
+```shell
+brew install openblas swig
+
+export OPENBLAS="$(brew --prefix openblas)"
+export CFLAGS="-falign-functions=8 ${CFLAGS}"
+
+pip install -r requirements.txt
+```
