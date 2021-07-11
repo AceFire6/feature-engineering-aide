@@ -3,7 +3,8 @@ import sys
 from typing import Optional
 
 from feature_engineer.experiment_config.experiment import Experiment
-from feature_engineer.experiment_runner.runner import ExperimentResult, ExperimentRunner
+from feature_engineer.experiment_runner.runner import ExperimentRunner
+from feature_engineer.experiment_runner.types import ExperimentResult
 
 
 class ExperimentName(ExperimentRunner):

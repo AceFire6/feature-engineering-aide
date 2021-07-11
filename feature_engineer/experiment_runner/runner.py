@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 import logging
 from logging import FileHandler, Formatter, Logger
 from pathlib import Path
-from typing import Any, ClassVar, Optional, Sequence, TypedDict
+from typing import ClassVar, Optional, Sequence, Union
 
 import orjson
 
@@ -10,23 +10,8 @@ from feature_engineer.experiment_config.experiment import Experiment
 
 from .runner_logging import setup_logger
 from .settings import DATE_FORMAT
+from .types import ExperimentInfo, ExperimentRun, LabelledResults
 from .utils import hook_function
-
-
-class ExperimentResult(TypedDict):
-    experiment: Experiment
-    run_number: int
-    time_taken: timedelta
-    seed: int
-
-    best_model: Any
-    features_used: list[str]
-
-    train_test_metric_results: dict[str, float]
-    holdout_metric_results: dict[str, float]
-    classification_report: str
-
-    extra_data: dict[str, Any]
 
 
 class ExperimentRunner:
@@ -147,15 +132,23 @@ class ExperimentRunner:
 
         return results_path / results_file
 
-    def write_experiment_results(self, experiment: Experiment, experiment_result: ExperimentResult) -> None:
-        self.logger.info(f'Writing results for {experiment.name} to file - {experiment_result}')
+    def write_experiment_data(
+        self,
+        experiment: Experiment,
+        experiment_data: Union[LabelledResults, ExperimentRun, ExperimentInfo],
+        label: Optional[str] = None,
+    ) -> None:
+        self.logger.info(f'Writing results for {experiment.name} to file - {experiment_data}')
         experiment_results_file_path = self.get_experiment_results_file(experiment)
 
         with experiment_results_file_path.open('ab') as results_file:
-            results_file.write(orjson.dumps(experiment_result, option=orjson.OPT_INDENT_2))
+            if label is not None:
+                results_file.write(f'{label}: '.encode())
 
-    def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> dict[int, ExperimentResult]:
-        results_per_run: dict[int, ExperimentResult] = {}
+            results_file.write(orjson.dumps(experiment_data, option=orjson.OPT_INDENT_2))
+
+    def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentInfo:
+        run_results = []
 
         for run_index in range(self.run_experiments_n_times):
             run_start_datetime = datetime.now()
@@ -172,35 +165,42 @@ class ExperimentRunner:
             experiment_run_seed = experiment.reset_seed(seed_to_set)
 
             experiment_result = self.experiment(experiment, logger)
-            experiment_result['run_number'] = run_number
-            experiment_result['seed'] = experiment_run_seed
 
             run_end_datetime = datetime.now()
             run_end = f'{run_end_datetime:%Y-%m-%d_%H:%M:%S}'
             self.logger.info(
                 f'Experiment {experiment.name} [{run_counter}] finished! - {run_end} - Results: {experiment_result}',
             )
-            experiment_result['time_taken'] = run_end_datetime - run_start_datetime
 
-            self.write_experiment_results(experiment, experiment_result)
-            results_per_run[run_index] = experiment_result
+            run_result: ExperimentRun = {
+                'run_number': run_number,
+                'seed': experiment_run_seed,
+                'time_taken': run_end_datetime - run_start_datetime,
+                'results': experiment_result,
+            }
+            run_results.append(run_result)
 
-        return results_per_run
+            self.write_experiment_data(experiment, experiment_result, label=f'Run {run_number}')
 
-    def run_experiments(self) -> dict[Experiment, dict[int, ExperimentResult]]:
+        return {
+            'experiment': experiment,
+            'runs': run_results,
+        }
+
+    def run_experiments(self) -> list[ExperimentInfo]:
         experiment_names = ', '.join(experiment.name for experiment in self.experiments)
         self.logger.info(f'Starting experiments: {experiment_names}')
 
-        experiment_results = {}
+        experiment_results = []
         for experiment in self.experiments:
             experiment_logger = self.get_experiment_logger(experiment)
             experiment_result = self.run_experiment(experiment, logger=experiment_logger)
-            experiment_results[experiment] = experiment_result
+            experiment_results.append(experiment_result)
 
         return experiment_results
 
     # Runner hooks - override these to add additional functionality
-    def experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentResult:
+    def experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> LabelledResults:
         raise NotImplementedError(
             'Missing experiment function - this should be overridden to define how the experiment is run',
         )
