@@ -151,7 +151,7 @@ class ExperimentRunner:
         self.logger.info(f'Writing results for {experiment.name} to file - {experiment_result}')
         experiment_results_file_path = self.get_experiment_results_file(experiment)
 
-        with experiment_results_file_path.open('wb') as results_file:
+        with experiment_results_file_path.open('ab') as results_file:
             results_file.write(orjson.dumps(experiment_result))
 
     def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> dict[int, ExperimentResult]:
