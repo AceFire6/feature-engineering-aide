@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import logging
 from logging import FileHandler, Formatter, Logger
 from pathlib import Path
-from typing import Any, ClassVar, Optional, TypedDict
+from typing import Any, ClassVar, Collection, Optional, TypedDict
 
 import orjson
 
@@ -41,11 +41,24 @@ class ExperimentRunner:
         *experiment_paths: str,
         runner_logging_path: Optional[str, Path] = None,
         run_experiments_n_times: int = 1,
+        seeds_for_experiment_runs: Optional[Collection[int]] = None,
         use_random_seeds: bool = False,
     ):
         self.run_start = datetime.now()
         self.name = self.name or self.__name__
         self.run_experiments_n_times = run_experiments_n_times
+        self.use_random_seeds = use_random_seeds
+
+        self.seeds_for_experiment_runs = seeds_for_experiment_runs
+        if seeds_for_experiment_runs is not None:
+            if use_random_seeds is True:
+                raise ValueError('Cannot set seeds_for_experiment_runs and use_random_seeds at the same time!')
+
+            if len(seeds_for_experiment_runs) != run_experiments_n_times:
+                raise ValueError(
+                    'seeds_for_experiment_runs len should be equal to run_experiment_n_times - '
+                    f'{len(seeds_for_experiment_runs)=} != {run_experiments_n_times=}',
+                )
 
         self._experiment_paths = experiment_paths
         self._additional_experiment_config = {'use_random_seeds': use_random_seeds}
