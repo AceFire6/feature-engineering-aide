@@ -136,7 +136,14 @@ class ExperimentRunner:
             results_file.write(orjson.dumps(experiment_result))
 
     def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentResult:
-        return self.run_experiment(experiment, logger)
+        self.logger.info(f'Running {experiment=}')
+
+        experiment_result = self.run_experiment(experiment, logger)
+
+        self.logger.info(f'Experiment {experiment.name} finished! - Results: {experiment_result}')
+        self.write_experiment_results(experiment, experiment_result)
+
+        return experiment_result
 
     def run_experiments(self) -> dict[Experiment, ExperimentResult]:
         experiment_names = ', '.join(experiment.name for experiment in self.experiments)
@@ -144,12 +151,9 @@ class ExperimentRunner:
 
         experiment_results = {}
         for experiment in self.experiments:
-            self.logger.debug(f'Running {experiment=}')
             experiment_logger = self.get_experiment_logger(experiment)
             experiment_result = self.run_experiment(experiment, logger=experiment_logger)
             experiment_results[experiment] = experiment_result
-            self.logger.info(f'Experiment {experiment.name} finished! - Results: {experiment_result}')
-            self.write_experiment_results(experiment, experiment_result)
 
         return experiment_results
 
