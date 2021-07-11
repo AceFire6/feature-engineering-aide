@@ -206,7 +206,7 @@ class Experiment:
 
         return experiments
 
-    def reset_seed(self, seed: int = None) -> None:
+    def reset_seed(self, seed: int = None) -> int:
         # Order of set seed preference:
         # reset_seed seed argument -> Experiment seed argument -> experiment config seed
         seed_to_use = seed or self._seed_arg or self.experiment_config_seed
@@ -216,6 +216,8 @@ class Experiment:
 
         self.seed = seed_to_use
         np.random.seed(seed_to_use)
+
+        return seed_to_use
 
     def training_set_sample_size(self) -> int:
         return self.prediction_data[self.target_column].size
