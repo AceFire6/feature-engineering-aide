@@ -40,11 +40,12 @@ class ExperimentRunner:
         self,
         *experiment_paths: str,
         runner_logging_path: Optional[Path] = None,
-        repeat_experiments_n_times: int = 0,
+        run_experiments_n_times: int = 1,
         use_random_seeds: bool = False,
     ):
         self.run_start = datetime.now()
         self.name = self.name or self.__name__
+        self.run_experiments_n_times = run_experiments_n_times
 
         self._experiment_paths = experiment_paths
         self._additional_experiment_config = {'use_random_seeds': use_random_seeds}
