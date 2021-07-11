@@ -1,7 +1,6 @@
 from datetime import datetime
 from logging import Logger
 import sys
-from typing import Optional
 
 from autosklearn.estimators import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
