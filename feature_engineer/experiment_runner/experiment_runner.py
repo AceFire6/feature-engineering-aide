@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import logging
 from logging import FileHandler, Formatter, Logger
 from pathlib import Path
-from typing import Any, ClassVar, Collection, Optional, TypedDict
+from typing import Any, ClassVar, Optional, Sequence, TypedDict
 
 import orjson
 
@@ -41,7 +41,7 @@ class ExperimentRunner:
         *experiment_paths: str,
         runner_logging_path: Optional[str, Path] = None,
         run_experiments_n_times: int = 1,
-        seeds_for_experiment_runs: Optional[Collection[int]] = None,
+        seeds_for_experiment_runs: Optional[Sequence[int]] = None,
         use_random_seeds: bool = False,
     ):
         self.run_start = datetime.now()
