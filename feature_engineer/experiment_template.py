@@ -1,14 +1,13 @@
 from logging import Logger
 import sys
-from typing import Optional
 
 from feature_engineer.experiment_config.experiment import Experiment
 from feature_engineer.experiment_runner.runner import ExperimentRunner
-from feature_engineer.experiment_runner.types import ExperimentResult
+from feature_engineer.experiment_runner.types import LabelledResults
 
 
 class ExperimentName(ExperimentRunner):
-    def experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentResult:
+    def experiment(self, experiment: Experiment, logger: Logger) -> LabelledResults:
         pass
 
 
