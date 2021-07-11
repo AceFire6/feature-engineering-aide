@@ -167,9 +167,11 @@ class ExperimentRunner:
             if self.seeds_for_experiment_runs:
                 seed_to_set = self.seeds_for_experiment_runs[run_index]
 
-            experiment.reset_seed(seed_to_set)
+            experiment_run_seed = experiment.reset_seed(seed_to_set)
 
             experiment_result = self.experiment(experiment, logger)
+            experiment_result['run_number'] = run_number
+            experiment_result['seed'] = experiment_run_seed
 
             self.logger.info(f'Experiment {experiment.name} [{run_counter}] finished! - Results: {experiment_result}')
             self.write_experiment_results(experiment, experiment_result)
