@@ -8,7 +8,7 @@ from sklearn.metrics import matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
 
 from .automl_addons.automl_discretizer import KBinsDiscretizer
-from .experiment_config.experiment import Experiment, parse_experiment_paths
+from .experiment_config.experiment import Experiment
 
 from experiment_runner.settings import (
     MEMORY_LIMIT,
@@ -143,6 +143,6 @@ if __name__ == '__main__':
     if not experiment_input_paths:
         print('Please pass in experiment files as arguments to this script')
 
-    experiment_list = parse_experiment_paths(experiment_input_paths)
+    experiment_list = Experiment.from_files(*experiment_input_paths)
     run_experiments(experiment_list)
     print('Experiments finished!')

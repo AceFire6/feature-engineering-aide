@@ -7,7 +7,7 @@ from autosklearn.metrics import make_scorer
 from sklearn.metrics import accuracy_score, classification_report, f1_score, matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
 
-from .experiment_config.experiment import Experiment, parse_experiment_paths
+from .experiment_config.experiment import Experiment
 from .experiment_runner.settings import MEMORY_LIMIT, N_JOBS, TASK_TIME, TIME_PER_RUN, TOTAL_MEMORY_LIMIT
 from .experiment_runner.utils import print_metric_results_five_number_summary, write_results
 
@@ -136,6 +136,6 @@ if __name__ == '__main__':
     if not experiment_input_paths:
         print('Please pass in experiment files as arguments to this script')
 
-    experiment_list = parse_experiment_paths(experiment_input_paths)
+    experiment_list = Experiment.from_files(*experiment_input_paths)
     run_experiments(experiment_list)
     print('Experiments finished!')

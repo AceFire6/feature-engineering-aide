@@ -4,7 +4,7 @@ import sys
 from sklearn.model_selection import LeaveOneGroupOut
 from tqdm import tqdm
 
-from .experiment_config.experiment import parse_experiment_paths
+from feature_engineer.experiment_config.experiment import Experiment
 from .experiment_runner.utils import print_metric_results_five_number_summary
 
 
@@ -53,5 +53,5 @@ if __name__ == '__main__':
     if not experiment_input_paths:
         print('Please pass in experiment files as arguments to this script')
 
-    experiments_list = parse_experiment_paths(experiment_input_paths)
+    experiments_list = Experiment.from_files(*experiment_input_paths)
     run_experiments(experiments_list)
