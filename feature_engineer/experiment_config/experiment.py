@@ -187,12 +187,14 @@ class Experiment:
         return cls(experiment_config, file_path=file_path, **additional_config)
 
     @classmethod
-    def from_files(cls, *file_paths: str, **file_paths_with_config) -> list['Experiment']:
-        all_files = chain(file_paths, file_paths_with_config.keys())
+    def from_files(cls, *file_paths: str, global_config: dict[str, Any], **file_path_config_map) -> list['Experiment']:
+        all_files = chain(file_paths, file_path_config_map.keys())
 
         experiments = []
         for experiment_file_path in all_files:
-            additional_config = file_paths_with_config.get(experiment_file_path, {})
+            specific_config = file_path_config_map.get(experiment_file_path, {})
+            # Specific config can override global config
+            additional_config = {**global_config, **specific_config}
 
             experiment = cls.from_file(experiment_file_path, **additional_config)
             experiments.append(experiment)
