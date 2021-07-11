@@ -31,27 +31,3 @@ or if these don't work (on MacOS for example). [Install Docker](https://docs.doc
 ```shell
 $ docker build -t feature-engineering-aide:latest .
 ```
-
-#### Installation Tips Mac
-
-##### Intel Mac
-
-```shell
-brew install gcc
-
-# Change the version of gcc to be correct
-export CC="$(brew --prefix gcc)/bin/gcc-11"
-
-pip install -r requirements.txt
-```
-
-##### M1 Mac
-
-```shell
-brew install openblas swig
-
-export OPENBLAS="$(brew --prefix openblas)"
-export CFLAGS="-falign-functions=8 ${CFLAGS}"
-
-pip install -r requirements.txt
-```
