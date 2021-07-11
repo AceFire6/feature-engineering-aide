@@ -152,7 +152,7 @@ class ExperimentRunner:
         experiment_results_file_path = self.get_experiment_results_file(experiment)
 
         with experiment_results_file_path.open('ab') as results_file:
-            results_file.write(orjson.dumps(experiment_result))
+            results_file.write(orjson.dumps(experiment_result, option=orjson.OPT_INDENT_2))
 
     def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> dict[int, ExperimentResult]:
         results_per_run: dict[int, ExperimentResult] = {}
