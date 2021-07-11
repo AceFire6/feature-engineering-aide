@@ -158,9 +158,11 @@ class ExperimentRunner:
         results_per_run: dict[int, ExperimentResult] = {}
 
         for run_index in range(self.run_experiments_n_times):
+            run_start_datetime = datetime.now()
+            run_start = f'{run_start_datetime:%Y-%m-%d_%H:%M:%S}'
             run_number = run_index + 1
             run_counter = f'{run_number} / {self.run_experiments_n_times}'
-            self.logger.info(f'Running {experiment=} - run number {run_counter}')
+            self.logger.info(f'Running {experiment=} - run number {run_counter} - {run_start}')
 
             # Set the seed for the current run
             seed_to_set = None
@@ -173,7 +175,13 @@ class ExperimentRunner:
             experiment_result['run_number'] = run_number
             experiment_result['seed'] = experiment_run_seed
 
-            self.logger.info(f'Experiment {experiment.name} [{run_counter}] finished! - Results: {experiment_result}')
+            run_end_datetime = datetime.now()
+            run_end = f'{run_end_datetime:%Y-%m-%d_%H:%M:%S}'
+            self.logger.info(
+                f'Experiment {experiment.name} [{run_counter}] finished! - {run_end} - Results: {experiment_result}',
+            )
+            experiment_result['time_taken'] = run_end_datetime - run_start_datetime
+
             self.write_experiment_results(experiment, experiment_result)
             results_per_run[run_index] = experiment_result
 
