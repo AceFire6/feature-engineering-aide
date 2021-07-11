@@ -147,7 +147,7 @@ class ExperimentRunner:
 
             results_file.write(orjson.dumps(experiment_data, option=orjson.OPT_INDENT_2))
 
-    def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentInfo:
+    def run_experiment(self, experiment: Experiment, logger: Logger) -> ExperimentInfo:
         run_results = []
 
         for run_index in range(self.run_experiments_n_times):
@@ -200,7 +200,7 @@ class ExperimentRunner:
         return experiment_results
 
     # Runner hooks - override these to add additional functionality
-    def experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> LabelledResults:
+    def experiment(self, experiment: Experiment, logger: Logger) -> LabelledResults:
         raise NotImplementedError(
             'Missing experiment function - this should be overridden to define how the experiment is run',
         )
