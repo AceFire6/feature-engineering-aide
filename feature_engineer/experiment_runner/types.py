@@ -9,6 +9,7 @@ class ExperimentResult(TypedDict):
     features_used: list[str]
 
     train_test_metric_results: dict[str, list[float]]
+    train_test_metric_results_summary: dict[str, dict[str, float]]
     holdout_metric_results: dict[str, float]
     classification_report: str
 
