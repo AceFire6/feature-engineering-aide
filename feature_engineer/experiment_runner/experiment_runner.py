@@ -39,7 +39,7 @@ class ExperimentRunner:
     def __init__(
         self,
         *experiment_paths: str,
-        runner_logging_path: Optional[Path] = None,
+        runner_logging_path: Optional[str, Path] = None,
         run_experiments_n_times: int = 1,
         use_random_seeds: bool = False,
     ):
@@ -53,6 +53,10 @@ class ExperimentRunner:
 
         # This will be set on the first access of self.logger
         self._logger = None
+
+        if isinstance(runner_logging_path, str):
+            runner_logging_path = Path(runner_logging_path)
+
         self.runner_logging_path = runner_logging_path
 
         self._experiment_loggers: dict[Experiment, Logger] = {}
