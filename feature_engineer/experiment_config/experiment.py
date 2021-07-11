@@ -65,7 +65,14 @@ class Experiment:
     classifiers: dict[str, Type[ClassifierMixin]]
     file_path: Path
 
-    def __init__(self, experiment_config: dict[str, Any], file_path: Path, use_random_seed: bool = False):
+    def __init__(
+        self,
+        experiment_config: dict[str, Any],
+        file_path: Path,
+        seed: int = None,
+        use_random_seed: bool = False,
+    ):
+        self._seed_arg = seed
         self.use_random_seed = use_random_seed
         self.experiment_config_seed = experiment_config['random_seed']
         self.reset_seed()
@@ -199,8 +206,11 @@ class Experiment:
 
         return experiments
 
-    def reset_seed(self) -> None:
-        seed_to_use = self.experiment_config_seed
+    def reset_seed(self, seed: int = None) -> None:
+        # Order of set seed preference:
+        # reset_seed seed argument -> Experiment seed argument -> experiment config seed
+        seed_to_use = seed or self._seed_arg or self.experiment_config_seed
+
         if self.use_random_seed:
             seed_to_use = int(datetime.now().timestamp() * 1e6)
 
