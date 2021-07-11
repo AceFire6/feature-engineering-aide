@@ -15,7 +15,9 @@ from .utils import hook_function
 
 class ExperimentResult(TypedDict):
     experiment: Experiment
+    run_number: int
     time_taken: timedelta
+    seed: int
 
     best_model: Any
     features_used: list[str]
