@@ -7,9 +7,9 @@ from autosklearn.metrics import make_scorer
 from sklearn.metrics import accuracy_score, classification_report, f1_score, matthews_corrcoef
 from sklearn.model_selection import LeaveOneGroupOut
 
-from .experiment_config.experiment import Experiment
-from .experiment_runner.settings import MEMORY_LIMIT, N_JOBS, TASK_TIME, TIME_PER_RUN, TOTAL_MEMORY_LIMIT
-from .experiment_runner.utils import print_metric_results_five_number_summary, write_results
+from feature_engineer.experiment_config.experiment import Experiment
+from feature_engineer.experiment_runner.settings import MEMORY_LIMIT, N_JOBS, TASK_TIME, TIME_PER_RUN, TOTAL_MEMORY_LIMIT
+from feature_engineer.experiment_runner.utils import print_metric_results_five_number_summary, write_results
 
 
 def run_experiment(experiment_counter: str, experiment: Experiment) -> None:
