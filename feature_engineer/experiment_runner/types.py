@@ -8,7 +8,7 @@ class ExperimentResult(TypedDict):
     best_model: Any
     features_used: list[str]
 
-    train_test_metric_results: dict[str, float]
+    train_test_metric_results: dict[str, list[float]]
     holdout_metric_results: dict[str, float]
     classification_report: str
 
