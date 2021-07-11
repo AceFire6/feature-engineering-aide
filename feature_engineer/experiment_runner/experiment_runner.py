@@ -152,17 +152,23 @@ class ExperimentRunner:
         with experiment_results_file_path.open('wb') as results_file:
             results_file.write(orjson.dumps(experiment_result))
 
-    def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> ExperimentResult:
-        self.logger.info(f'Running {experiment=}')
+    def run_experiment(self, experiment: Experiment, logger: Optional[Logger] = None) -> dict[int, ExperimentResult]:
+        results_per_run: dict[int, ExperimentResult] = {}
 
-        experiment_result = self.run_experiment(experiment, logger)
+        for run_index in range(self.run_experiments_n_times):
+            run_number = run_index + 1
+            run_counter = f'{run_number} / {self.run_experiments_n_times}'
+            self.logger.info(f'Running {experiment=} - run number {run_counter}')
 
-        self.logger.info(f'Experiment {experiment.name} finished! - Results: {experiment_result}')
-        self.write_experiment_results(experiment, experiment_result)
+            experiment_result = self.experiment(experiment, logger)
 
-        return experiment_result
+            self.logger.info(f'Experiment {experiment.name} [{run_counter}] finished! - Results: {experiment_result}')
+            self.write_experiment_results(experiment, experiment_result)
+            results_per_run[run_index] = experiment_result
 
-    def run_experiments(self) -> dict[Experiment, ExperimentResult]:
+        return results_per_run
+
+    def run_experiments(self) -> dict[Experiment, dict[int, ExperimentResult]]:
         experiment_names = ', '.join(experiment.name for experiment in self.experiments)
         self.logger.info(f'Starting experiments: {experiment_names}')
 
