@@ -57,8 +57,8 @@ class Experiment:
     holdout_y: pd.Series
 
     name: str
-    metric_results: dict
-    metric_results_labels: dict
+    metric_results: dict[str, list[float]]
+    metric_results_labels: dict[str, list[str]]
 
     metrics: dict[str, ScorerProtocol]
     feature_preprocessors: dict[str, Optional[Callable]]
