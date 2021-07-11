@@ -211,8 +211,8 @@ class ExperimentRunner:
     def _after_run_all_experiments(self) -> None:
         self.logger.debug('Running _after_run_all_experiments')
 
-    def _before_run_experiment(self) -> None:
-        self.logger.debug('Running _before_run_experiment')
+    def _before_run_experiment(self, experiment: Experiment, **kwargs) -> None:
+        self.logger.debug(f'Running _before_run_experiment - {experiment.name}')
 
-    def _after_run_experiment(self) -> None:
-        self.logger.debug('Running _after_run_experiment')
+    def _after_run_experiment(self, experiment: Experiment, **kwargs) -> None:
+        self.logger.debug(f'Running _after_run_experiment - {experiment.name}')

@@ -89,12 +89,12 @@ def hook_function(pre_hook: Optional[Callable] = None, post_hook: Optional[Calla
         @functools.wraps
         def _func_wrapper(*args, **kwargs) -> DecoratedFunctionResult:
             if pre_hook is not None:
-                pre_hook()
+                pre_hook(*args, **kwargs)
 
             result = func(*args, **kwargs)
 
             if post_hook is not None:
-                post_hook()
+                post_hook(*args, **kwargs)
 
             return result
         return _func_wrapper
