@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 from typing import Any, Callable, Iterable, Optional, Protocol, Type, TypedDict, Union
 from pathlib import Path
 
@@ -63,8 +64,11 @@ class Experiment:
     classifiers: dict[str, Type[ClassifierMixin]]
     file_path: Path
 
-    def __init__(self, experiment_config: dict[str, Any], file_path: Path):
-        self.seed = experiment_config['random_seed']
+    def __init__(self, experiment_config: dict[str, Any], file_path: Path, use_random_seed: bool = False):
+        self.use_random_seed = use_random_seed
+
+        random_number = int(datetime.now().timestamp() * 1e6)
+        self.seed = random_number if use_random_seed else experiment_config['random_seed']
         np.random.seed(self.seed)
 
         self.prediction_data_file = Path(experiment_config['data_source'])
