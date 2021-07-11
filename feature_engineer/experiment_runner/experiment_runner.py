@@ -36,7 +36,13 @@ class ExperimentRunner:
     experiment_log_format: ClassVar[Optional[str]] = None
     log_to_file: ClassVar[bool] = True
 
-    def __init__(self, *experiment_paths: str, runner_logging_path: Optional[Path] = None):
+    def __init__(
+        self,
+        *experiment_paths: str,
+        runner_logging_path: Optional[Path] = None,
+        repeat_experiments_n_times: int = 0,
+        use_random_seeds: bool = False,
+    ):
         self.run_start = datetime.now()
         self.name = self.name or self.__name__
 
