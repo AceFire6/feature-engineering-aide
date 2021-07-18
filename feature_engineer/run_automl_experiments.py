@@ -14,7 +14,7 @@ from feature_engineer.experiment_runner.types import ExperimentResult, LabelledR
 from feature_engineer.experiment_runner.utils import get_metric_results_five_number_summary
 
 
-class ExperimentName(ExperimentRunner):
+class AutoMLPreprocessorExperiment(ExperimentRunner):
     def experiment(self, experiment: Experiment, logger: Logger) -> LabelledResults:
         labelled_results = {}
         metrics_as_scorers = [make_scorer(name, score_func) for name, score_func in experiment.metrics.items()]
@@ -128,5 +128,8 @@ if __name__ == '__main__':
     if not experiment_input_paths:
         print('Please pass in experiment files as arguments to this script')
 
-    experiment_results = ExperimentName(*experiment_input_paths, use_random_seeds=True)
+    experiment_results = AutoMLPreprocessorExperiment(
+        *experiment_input_paths,
+        use_random_seeds=True,
+    )
     print(f'Experiments finished - {experiment_results}')
