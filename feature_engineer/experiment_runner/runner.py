@@ -87,7 +87,7 @@ class ExperimentRunner:
                 file_handler=runner_file_handler,
             )
 
-        return self.logger
+        return self._logger
 
     def setup_experiment_logger(self, experiment: Experiment) -> Logger:
         default_log_format = (
