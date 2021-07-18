@@ -179,6 +179,9 @@ class Experiment:
         }
         self.file_path = file_path
 
+    def __str__(self) -> str:
+        return f'Experiment {self.name} - (seed = {self.seed})'
+
     @classmethod
     def from_file(cls, file_path: Union[Path, str], **additional_config) -> 'Experiment':
         if isinstance(file_path, str):
