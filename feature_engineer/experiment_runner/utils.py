@@ -86,7 +86,7 @@ def write_results(experiment: Experiment, *result_lines: str) -> None:
 
 def hook_function(pre_hook: Optional[Callable] = None, post_hook: Optional[Callable] = None) -> Decorator:
     def decorator(func: DecoratedFunction) -> Callable[..., DecoratedFunctionResult]:
-        @functools.wraps
+        @functools.wraps(func)
         def _func_wrapper(*args, **kwargs) -> DecoratedFunctionResult:
             if pre_hook is not None:
                 pre_hook(*args, **kwargs)
