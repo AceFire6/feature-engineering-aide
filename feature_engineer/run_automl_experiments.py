@@ -128,8 +128,9 @@ if __name__ == '__main__':
     if not experiment_input_paths:
         print('Please pass in experiment files as arguments to this script')
 
-    experiment_results = AutoMLPreprocessorExperiment(
+    auto_ml_preprocessor_experiment_runner = AutoMLPreprocessorExperiment(
         *experiment_input_paths,
         use_random_seeds=True,
     )
+    experiment_results = auto_ml_preprocessor_experiment_runner.run_experiments()
     print(f'Experiments finished - {experiment_results}')
