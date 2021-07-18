@@ -1,5 +1,8 @@
 FROM python:3.9-slim
 
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential gcc swig3.0
+RUN ln -s /usr/bin/swig3.0 /usr/bin/swig
+
 # Change to working directory
 WORKDIR /feature_engineering_aide/
 
@@ -15,8 +18,6 @@ RUN export OPENBLAS_NUM_THREADS=1
 RUN export MKL_NUM_THREADS=1
 RUN export BLAS_NUM_THREADS=1
 RUN export OMP_NUM_THREADS=1
-
-RUN pip install auto-sklearn==0.12.6
 
 # Bring in requirements and install any remaining requirements
 COPY requirements.txt .
