@@ -26,13 +26,13 @@ class ExperimentRunner:
     def __init__(
         self,
         *experiment_paths: str,
-        runner_logging_path: Optional[str, Path] = None,
+        runner_logging_path: Optional[Union[str, Path]] = None,
         run_experiments_n_times: int = 1,
         seeds_for_experiment_runs: Optional[Sequence[int]] = None,
         use_random_seeds: bool = False,
     ):
         self.run_start = datetime.now()
-        self.name = self.name or self.__name__
+        self.name = self.name or self.__class__.__name__
         self.run_experiments_n_times = run_experiments_n_times
         self.use_random_seeds = use_random_seeds
 
