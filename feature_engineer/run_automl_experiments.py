@@ -111,7 +111,7 @@ class AutoMLPreprocessorExperiment(ExperimentRunner):
             [
                 f'Running {len(self.experiments)} experiment(s)!',
                 'Config:',
-                f'\tn = {experiment.training_set_sample_size()}\n',
+                f'\tn = {experiment.training_set_sample_size()}',
                 f'\tn_jobs = {settings.N_JOBS}',
                 f'\ttotal_time = {settings.TASK_TIME}',
                 f'\ttime_per_run = {settings.TIME_PER_RUN}',
