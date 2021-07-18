@@ -220,7 +220,7 @@ class Experiment:
         seed_to_use = seed or self._seed_arg or self.experiment_config_seed
 
         if self.use_random_seed:
-            seed_to_use = int(datetime.now().timestamp() * 1e6)
+            seed_to_use = int(datetime.now().timestamp())
 
         self.seed = seed_to_use
         np.random.seed(seed_to_use)
