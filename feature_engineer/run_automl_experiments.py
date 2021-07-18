@@ -34,7 +34,6 @@ class AutoMLPreprocessorExperiment(ExperimentRunner):
             #     worst_possible_result=-1.0,
             # )
             classifier = AutoSklearnClassifier(
-                include_preprocessors=['KBinsDiscretizer'],
                 time_left_for_this_task=settings.TASK_TIME,
                 per_run_time_limit=settings.TIME_PER_RUN,
                 n_jobs=settings.N_JOBS,
