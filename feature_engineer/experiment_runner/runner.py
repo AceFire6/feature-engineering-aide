@@ -48,7 +48,7 @@ class ExperimentRunner:
                 )
 
         self._experiment_paths = experiment_paths
-        self._additional_experiment_config = {'use_random_seeds': use_random_seeds}
+        self._additional_experiment_config = {'use_random_seed': use_random_seeds}
         self.experiments = Experiment.from_files(*experiment_paths, global_config=self._additional_experiment_config)
 
         # This will be set on the first access of self.logger
