@@ -145,7 +145,12 @@ class ExperimentRunner:
             if label is not None:
                 results_file.write(f'{label}: '.encode())
 
-            results_file.write(orjson.dumps(experiment_data, option=orjson.OPT_INDENT_2))
+            results_file.write(
+                orjson.dumps(
+                    experiment_data,
+                    option=orjson.OPT_INDENT_2 | orjson.OPT_SERIALIZE_NUMPY,
+                ),
+            )
 
     def run_experiment(self, experiment: Experiment, logger: Logger) -> ExperimentInfo:
         run_results = []
@@ -175,12 +180,12 @@ class ExperimentRunner:
             run_result: ExperimentRun = {
                 'run_number': run_number,
                 'seed': experiment_run_seed,
-                'time_taken': run_end_datetime - run_start_datetime,
+                'time_taken': (run_end_datetime - run_start_datetime).total_seconds(),
                 'results': experiment_result,
             }
             run_results.append(run_result)
 
-            self.write_experiment_data(experiment, experiment_result, label=f'Run {run_number}')
+            self.write_experiment_data(experiment, run_result, label=f'Run {run_number}')
 
         return {
             'experiment': experiment,

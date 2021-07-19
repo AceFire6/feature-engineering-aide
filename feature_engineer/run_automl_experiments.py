@@ -86,8 +86,8 @@ class AutoMLPreprocessorExperiment(ExperimentRunner):
             classification_text_report = classification_report(experiment.holdout_y, holdout_prediction)
 
             experiment_results: ExperimentResult = {
-                'best_model': classifier.get_models_with_weights(),
-                'features_used': features_selected,
+                'best_model': classifier.show_models(),
+                'features_used': list(features_selected),
                 'train_test_metric_results': experiment.metric_results,
                 'train_test_metric_results_summary': get_metric_results_five_number_summary(experiment.metric_results),
                 'holdout_metric_results': {
@@ -98,7 +98,7 @@ class AutoMLPreprocessorExperiment(ExperimentRunner):
                 'classification_report': classification_text_report,
                 'extra_data': {
                     'statistics': classifier.sprint_statistics(),
-                    'show_models': classifier.show_models(),
+                    'cv_results': str(classifier.cv_results_),
                 },
             }
             labelled_results[preprocessor_name] = experiment_results

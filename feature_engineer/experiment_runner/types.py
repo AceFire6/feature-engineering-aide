@@ -1,4 +1,3 @@
-from datetime import timedelta
 from typing import Any, TypedDict
 
 from feature_engineer.experiment_config.experiment import Experiment
@@ -23,7 +22,7 @@ class LabelledResults(TypedDict):
 
 class ExperimentRun(TypedDict):
     run_number: int
-    time_taken: timedelta
+    time_taken: float
     seed: int
 
     results: LabelledResults
