@@ -19,6 +19,9 @@ RUN export MKL_NUM_THREADS=1
 RUN export BLAS_NUM_THREADS=1
 RUN export OMP_NUM_THREADS=1
 
+# We do this to cache this part of the install because it's really slow
+RUN pip install auto-sklearn==0.12.6
+
 # Bring in requirements and install any remaining requirements
 COPY requirements.txt .
 RUN pip install -r requirements.txt
