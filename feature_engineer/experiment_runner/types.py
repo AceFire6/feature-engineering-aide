@@ -4,9 +4,7 @@ from feature_engineer.experiment_config.experiment import Experiment
 
 
 class ExperimentResult(TypedDict):
-    best_model: Any
     features_used: list[str]
-
     train_test_metric_results: dict[str, list[float]]
     train_test_metric_results_summary: dict[str, dict[str, float]]
     holdout_metric_results: dict[str, float]
