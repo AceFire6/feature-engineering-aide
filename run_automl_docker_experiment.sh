@@ -8,4 +8,4 @@ docker run \
         --env FEA_TOTAL_MEMORY_LIMIT=8000 \
         --env FEA_TASK_TIME=7200 \
         feature-engineering-aide:latest \
-        feature_engineer/run_automl_experiments.py "$1"
+        feature_engineer/run_automl_experiment.py "$1"
