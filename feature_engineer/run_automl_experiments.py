@@ -86,7 +86,6 @@ class AutoMLPreprocessorExperiment(ExperimentRunner):
             classification_text_report = classification_report(experiment.holdout_y, holdout_prediction)
 
             experiment_results: ExperimentResult = {
-                'best_model': classifier.show_models(),
                 'features_used': list(features_selected),
                 'train_test_metric_results': experiment.metric_results,
                 'train_test_metric_results_summary': get_metric_results_five_number_summary(experiment.metric_results),
@@ -98,10 +97,12 @@ class AutoMLPreprocessorExperiment(ExperimentRunner):
                 'classification_report': classification_text_report,
                 'extra_data': {
                     'statistics': classifier.sprint_statistics(),
-                    'cv_results': str(classifier.cv_results_),
                 },
             }
             labelled_results[preprocessor_name] = experiment_results
+
+            self.write_cv_results(experiment, classifier.cv_results_)
+            self.write_model(experiment, classifier.get_models_with_weights(), name='final_ensemble')
 
         return labelled_results
 
