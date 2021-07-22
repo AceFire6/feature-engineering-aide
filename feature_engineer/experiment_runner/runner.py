@@ -10,6 +10,7 @@ from typing import (
     Union,
 )
 
+import joblib
 import orjson
 
 from feature_engineer.experiment_config.experiment import Experiment
@@ -158,11 +159,11 @@ class ExperimentRunner:
                 ),
             )
 
-    def write_model(self, experiment: Experiment, model: Any) -> None:
-        import joblib
+    def write_model(self, experiment: Experiment, model: Any, name: str = '') -> None:
+        name = f'_{name}' if name else name
 
         results_path = self.get_results_path(experiment)
-        model_filename = f'{experiment.name}_{experiment.start_time}_model.joblib.lzma'
+        model_filename = f'{experiment.name}_{experiment.start_time}_model{name}.joblib.lzma'
 
         model_dump_file = results_path / model_filename
 
