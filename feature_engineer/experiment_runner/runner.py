@@ -186,6 +186,7 @@ class ExperimentRunner:
                 seed_to_set = self.seeds_for_experiment_runs[run_index]
 
             experiment_run_seed = experiment.reset_seed(seed_to_set)
+            logger = self.get_experiment_logger(experiment)
 
             experiment_result = self.experiment(experiment, logger)
 
@@ -216,8 +217,7 @@ class ExperimentRunner:
 
         experiment_results = []
         for experiment in self.experiments:
-            experiment_logger = self.get_experiment_logger(experiment)
-            experiment_result = self.run_experiment(experiment, logger=experiment_logger)
+            experiment_result = self.run_experiment(experiment)
             experiment_results.append(experiment_result)
 
         return experiment_results
