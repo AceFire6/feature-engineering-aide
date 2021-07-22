@@ -169,6 +169,14 @@ class ExperimentRunner:
 
         joblib.dump(model, filename=model_dump_file)
 
+    def write_cv_results(self, experiment: Experiment, cv_results: dict) -> None:
+        results_path = self.get_results_path(experiment)
+
+        model_filename = f'{experiment.name}_{experiment.start_time}_cv_results.joblib.lzma'
+        model_dump_file = results_path / model_filename
+
+        joblib.dump(cv_results, filename=model_dump_file)
+
     def run_experiment(self, experiment: Experiment) -> ExperimentInfo:
         run_results = []
 
