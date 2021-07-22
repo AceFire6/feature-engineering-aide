@@ -1,6 +1,7 @@
 auto-sklearn==0.12.6
 bpython
 environs
+joblib
 numpy
 orjson
 pandas
