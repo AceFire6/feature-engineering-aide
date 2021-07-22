@@ -2,7 +2,13 @@ from datetime import datetime
 import logging
 from logging import FileHandler, Formatter, Logger
 from pathlib import Path
-from typing import ClassVar, Optional, Sequence, Union
+from typing import (
+    Any,
+    ClassVar,
+    Optional,
+    Sequence,
+    Union,
+)
 
 import orjson
 
