@@ -168,6 +168,8 @@ class ExperimentRunner:
         for run_index in range(self.run_experiments_n_times):
             run_start_datetime = datetime.now()
             run_start = f'{run_start_datetime:%Y-%m-%d_%H:%M:%S}'
+            experiment.start_time = run_start
+
             run_number = run_index + 1
             run_counter = f'{run_number} / {self.run_experiments_n_times}'
             self.logger.info(f'Running {experiment=} - run number {run_counter} - {run_start}')
