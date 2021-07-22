@@ -152,7 +152,17 @@ class ExperimentRunner:
                 ),
             )
 
-    def run_experiment(self, experiment: Experiment, logger: Logger) -> ExperimentInfo:
+    def write_model(self, experiment: Experiment, model: Any) -> None:
+        import joblib
+
+        results_path = self.get_results_path(experiment)
+        model_filename = f'{experiment.name}_{experiment.start_time}_model.joblib.lzma'
+
+        model_dump_file = results_path / model_filename
+
+        joblib.dump(model, filename=model_dump_file)
+
+    def run_experiment(self, experiment: Experiment) -> ExperimentInfo:
         run_results = []
 
         for run_index in range(self.run_experiments_n_times):
