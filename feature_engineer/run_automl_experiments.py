@@ -107,6 +107,10 @@ class AutoMLPreprocessorExperiment(ExperimentRunner):
         return labelled_results
 
     def _before_run_experiment(self, experiment: Experiment, **kwargs) -> None:
+        run_start_datetime = datetime.now()
+        run_start = f'{run_start_datetime:%Y-%m-%d_%H:%M:%S}'
+        experiment.start_time = run_start
+
         experiment_logger = self.get_experiment_logger(experiment)
         config_log = '\n'.join(
             [
