@@ -6,7 +6,7 @@ from .settings import LOG_FORMAT, LOG_FORMATTER, LOG_LEVEL, LOG_TO_FILE
 
 
 default_handlers = [NullHandler()]
-basicConfig(format=LOG_FORMAT, level=LOG_LEVEL, handlers=default_handlers)
+basicConfig(format=LOG_FORMAT, level=LOG_LEVEL, handlers=default_handlers, style='{')
 
 
 def setup_logger(
