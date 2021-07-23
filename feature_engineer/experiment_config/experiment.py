@@ -197,7 +197,7 @@ class Experiment:
     @classmethod
     def from_files(
         cls,
-        *file_paths: str,
+        *file_paths: Union[Path, str],
         global_config: Optional[dict[str, Any]] = None,
         **file_path_config_map,
     ) -> list['Experiment']:
