@@ -1,10 +1,9 @@
-import sys
-
 from autosklearn.estimators import AutoSklearnClassifier
 from autosklearn.metrics import make_scorer
 from sklearn.model_selection import LeaveOneGroupOut
 
 from feature_engineer.base_automl_experiment import BaseAutoMLExperiment
+from feature_engineer.experiment_cli import run_experiments
 from feature_engineer.experiment_config.experiment import Experiment
 from feature_engineer.experiment_runner import settings
 
@@ -30,13 +29,4 @@ class AutoMLFeatureQualityExperiment(BaseAutoMLExperiment):
 
 
 if __name__ == '__main__':
-    experiment_input_paths = sys.argv[1:]
-    if not experiment_input_paths:
-        print('Please pass in experiment files as arguments to this script')
-
-    auto_ml_feature_quality_experiment_runner = AutoMLFeatureQualityExperiment(
-        *experiment_input_paths,
-        use_random_seeds=True,
-    )
-    experiment_results = auto_ml_feature_quality_experiment_runner.run_experiments()
-    print(f'Experiments finished - {experiment_results}')
+    run_experiments(AutoMLFeatureQualityExperiment)
