@@ -8,7 +8,7 @@ from sklearn.model_selection import LeaveOneGroupOut
 from feature_engineer.experiment_config.experiment import Experiment
 from feature_engineer.experiment_runner import settings
 from feature_engineer.experiment_runner.runner import ExperimentRunner
-from feature_engineer.experiment_runner.types import ExperimentResult, LabelledResults
+from feature_engineer.experiment_runner.types import ExperimentResult
 from feature_engineer.experiment_runner.utils import get_metric_results_five_number_summary
 
 
@@ -16,7 +16,7 @@ class BaseAutoMLExperiment(ExperimentRunner):
     def get_classifier(self, experiment: Experiment) -> AutoSklearnClassifier:
         raise NotImplementedError
 
-    def experiment(self, experiment: Experiment, logger: Logger) -> LabelledResults:
+    def experiment(self, experiment: Experiment, logger: Logger) -> dict[str, ExperimentResult]:
         labelled_results = {}
 
         preprocessor_count = len(experiment.feature_preprocessors)

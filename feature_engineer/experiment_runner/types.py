@@ -13,17 +13,12 @@ class ExperimentResult(TypedDict):
     extra_data: dict[str, Any]
 
 
-class LabelledResults(TypedDict):
-    label: str
-    result: ExperimentResult
-
-
 class ExperimentRun(TypedDict):
     run_number: int
     time_taken: float
     seed: int
 
-    results: LabelledResults
+    results: dict[str, ExperimentResult]
 
 
 class ExperimentInfo(TypedDict):

@@ -17,7 +17,11 @@ from feature_engineer.experiment_config.experiment import Experiment
 
 from .runner_logging import setup_logger
 from .settings import DATE_FORMAT
-from .types import ExperimentInfo, ExperimentRun, LabelledResults
+from .types import (
+    ExperimentInfo,
+    ExperimentResult,
+    ExperimentRun,
+)
 from .utils import hook_function
 
 
@@ -142,7 +146,7 @@ class ExperimentRunner:
     def write_experiment_data(
         self,
         experiment: Experiment,
-        experiment_data: Union[LabelledResults, ExperimentRun, ExperimentInfo],
+        experiment_data: Union[dict[str, ExperimentResult], ExperimentRun, ExperimentInfo],
         label: Optional[str] = None,
     ) -> None:
         self.logger.info(f'Writing results for {experiment.name} to file - {experiment_data}')
@@ -232,7 +236,7 @@ class ExperimentRunner:
         return experiment_results
 
     # Runner hooks - override these to add additional functionality
-    def experiment(self, experiment: Experiment, logger: Logger) -> LabelledResults:
+    def experiment(self, experiment: Experiment, logger: Logger) -> dict[str, ExperimentResult]:
         raise NotImplementedError(
             'Missing experiment function - this should be overridden to define how the experiment is run',
         )
