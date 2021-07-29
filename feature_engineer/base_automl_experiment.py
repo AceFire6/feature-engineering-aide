@@ -85,8 +85,12 @@ class BaseAutoMLExperiment(ExperimentRunner):
             }
             labelled_results[preprocessor_name] = experiment_results
 
-            self.write_cv_results(experiment, classifier.cv_results_)
-            self.write_model(experiment, classifier.get_models_with_weights(), name='final_ensemble')
+            self.write_cv_results(experiment, classifier.cv_results_, name=preprocessor_name)
+            self.write_model(
+                experiment,
+                classifier.get_models_with_weights(),
+                name=f'{preprocessor_name}_final_ensemble',
+            )
 
         return labelled_results
 
