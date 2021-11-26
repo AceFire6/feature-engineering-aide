@@ -111,7 +111,7 @@ def run_experiments(experiments: list[Experiment]) -> None:
     )
 
     for index, experiment in enumerate(experiments):
-        start_time = f'{datetime.now():%Y-%m-%d_%H:%M:%S}'
+        start_time = f'{datetime.now():%Y-%m-%d_%H-%M-%S}'
         experiment.start_time = start_time
         experiment_counter = f'[{index + 1}/{total_experiments}]'
         print(f'{experiment_counter} Starting experiment {experiment.name} {experiment.seed=} at {start_time}')
