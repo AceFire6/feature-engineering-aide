@@ -4,7 +4,8 @@
 
 ## Why?
 This project was developed as part of my Master's thesis 
-at the University of Cape Town.
+at the University of Cape Town. Ultimately, I never completed my Master's
+so I made this code open source because I enjoyed working on it.
 
 The goal of the project is to compare the results of a project done 
 by Nudelman et al. with those produced by Automated Machine Learning systems.
